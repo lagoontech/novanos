@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:novanas/helper/main_binding.dart';
-import 'package:novanas/screens/auth/login_screen.dart';
 import 'package:novanas/screens/core/colors.dart';
 import 'package:novanas/screens/loading_screen.dart';
-import 'package:novanas/screens/main_screen.dart';
 import 'helper/get_di.dart' as di;
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {

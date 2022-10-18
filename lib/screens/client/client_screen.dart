@@ -49,6 +49,7 @@ class _ClientScreenState extends State<ClientScreen> {
 
   @override
   Widget build(BuildContext context) {
+    FocusScope.of(context).requestFocus(FocusNode());
     return Scaffold(
       body: SafeArea(
         child: Padding(
