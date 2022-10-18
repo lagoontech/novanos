@@ -3,6 +3,7 @@ class URL {
   static String BASE_URL = "http://global.timetick.ae/MAttendance";
 
   static String LOGIN = "$BASE_URL/api/Login/Login?";
+  static String PROFILE = "$BASE_URL/api/Client/ClientList?";
   static String CHECK_IN = "$BASE_URL/api/IO/IO/";
   static String CHECK_IN_NEW = "$BASE_URL/api/CheckInOut/CheckInOut";
   static String MANUAL_ENTRY_LIST = "$BASE_URL/api/ManualEntry/ManualEntryList";

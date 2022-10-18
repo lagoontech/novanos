@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:novanas/models/profile.dart';
 import 'package:novanas/models/user.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../helper/connectivity_manager.dart';
 import '../api_urls.dart';
 import 'package:http/http.dart' as http;
@@ -9,6 +11,15 @@ import 'package:http/http.dart' as http;
 import '../auth_service.dart';
 
 class LoginController extends GetxController {
+  List<Profile> profileDetails = [];
+
+  @override
+  void onInit() async {
+    await getProfile();
+
+    super.onInit();
+  }
+
   Future<bool> loginWithUserDetails(
       {required String userName,
       required String passWord,
@@ -58,7 +69,7 @@ class LoginController extends GetxController {
               geofenceLong: userReponse.longitude!,
               dimeter: userReponse.dimeter!,
               geofenceUser: userReponse.geofenceUser!);
-
+          await getProfile();
           return true;
         } else {
           Get.snackbar('Something Went Wrong', 'Please try again!');
@@ -72,6 +83,32 @@ class LoginController extends GetxController {
       Get.snackbar(
           'Connection Failed', 'Please check your network connection!');
       return false;
+    }
+  }
+
+  Future<List<Profile>?> getProfile() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+
+    String employeeNo = sharedPreferences.getString('username')!;
+    print(employeeNo);
+    Map<String, dynamic> params = {'EmployeeNo': employeeNo};
+
+    String url = '${URL.PROFILE}${Uri(queryParameters: params).query}';
+
+    final response = await http.get(Uri.parse(url), headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    });
+
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      profileDetails = [];
+      profileDetails = profileFromJson(response.body);
+      print(profileDetails);
+      return profileDetails;
+    } else {
+      return null;
     }
   }
 }

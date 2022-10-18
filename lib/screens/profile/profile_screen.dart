@@ -1,56 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:novanas/models/profile.dart';
 import 'package:novanas/screens/auth/login_screen.dart';
 import 'package:novanas/screens/core/constants.dart';
 import 'package:novanas/screens/core/dimensions.dart';
 import 'package:novanas/screens/core/widget/subtitle_text.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../../models/user.dart';
+import 'package:novanas/services/controllers/login_controller.dart';
+import 'package:novanas/services/date_service.dart';
 import '../../services/auth_service.dart';
 import '../core/colors.dart';
 import '../core/widget/profile_data_field.dart';
 import '../core/widget/title_page.dart';
 import '../core/widget/title_text.dart';
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+class ProfileScreen extends StatelessWidget {
+  ProfileScreen({Key? key}) : super(key: key);
 
-  @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
-}
-
-class _ProfileScreenState extends State<ProfileScreen> {
-  String profileName = '';
-  String profileCompany = '';
-  String profileDepartment = '';
-  String profileLocation = '';
-  @override
-  void initState() {
-    setData();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  setData() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-
-    profileName = sharedPreferences.getString('name')!;
-    profileDepartment = sharedPreferences.getString('departmentName')!;
-
-    // profileCompany = user.companyName!;
-    // profileDepartment = user.departmentName!;
-    // profileLocation = user.location;
-
-    setState(() {});
-  }
+  LoginController loginController = Get.find();
 
   @override
   Widget build(BuildContext context) {
+    Profile profile = loginController.profileDetails.first;
+
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -81,8 +52,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   CircleAvatar(
                     backgroundColor: AppColors.acccentColor,
-                    backgroundImage:
-                        const AssetImage('assets/images/profile.jpg'),
+                    backgroundImage: NetworkImage(
+                        profile.photo ?? 'assets/images/profile.jpg'),
                     maxRadius: 50,
                   ),
                   SizedBox(
@@ -91,10 +62,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         TextTitle(
-                          title: profileName,
+                          title: profile.firstName.toString(),
                         ),
                         SubTitleText(
-                          subTitle: profileDepartment,
+                          subTitle: profile.designation.toString(),
                         ),
                       ],
                     ),
@@ -103,19 +74,34 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             kHeight20,
-            const ProfileDataField(
+            ProfileDataField(
+              title: 'Department',
+              value: profile.department.toString(),
+            ),
+            kHeight20,
+            ProfileDataField(
               title: 'Email',
-              value: 'nadiraziziyah@gmail.com',
+              value: profile.email ?? 'Not Available',
             ),
             kHeight20,
-            const ProfileDataField(
+            ProfileDataField(
               title: 'Phone',
-              value: 'nadiraziziyah@gmail.com',
+              value: profile.phone == ''
+                  ? 'Not Available'
+                  : profile.phone ?? 'Not Available',
             ),
             kHeight20,
-            const ProfileDataField(
-              title: 'Address',
-              value: 'Naif Souq, Deira, Dubai, United Arab Emirates',
+            ProfileDataField(
+              title: 'DOB',
+              value: DateService.getFormatedSlashDate(profile.dateofBirth!) ??
+                  'Not Available',
+            ),
+            kHeight20,
+            ProfileDataField(
+              title: 'Martial Status',
+              value: profile.maritalStatus == ''
+                  ? 'Not Available'
+                  : profile.maritalStatus ?? 'Not Available',
             ),
             kHeight30,
             Container(

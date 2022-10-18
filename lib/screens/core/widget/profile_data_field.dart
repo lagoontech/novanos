@@ -28,8 +28,7 @@ class ProfileDataField extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Container(
-              width: Dimensions.width90,
-              height: Dimensions.height30,
+              width: Dimensions.width90 + Dimensions.width10,
               padding: EdgeInsets.symmetric(
                   horizontal: Dimensions.width10, vertical: Dimensions.height5),
               alignment: Alignment.center,
@@ -39,6 +38,7 @@ class ProfileDataField extends StatelessWidget {
               child: Text(
                 title,
                 maxLines: 2,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                     overflow: TextOverflow.ellipsis,
                     fontSize: Dimensions.fontSize12,

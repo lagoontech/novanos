@@ -22,6 +22,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
       var islogin = await AuthService().getAuthentication();
       if (islogin) {
         ClientController clientController = Get.find();
+
         await clientController.getClientList();
         Get.off(() => const MainScreen());
       } else {
