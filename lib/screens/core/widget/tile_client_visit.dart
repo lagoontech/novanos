@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:novanas/models/client.dart';
 import 'package:novanas/screens/core/constants.dart';
 
 import '../../client/visit_client.dart';
@@ -9,12 +10,10 @@ import '../dimensions.dart';
 class TileClientVisit extends StatelessWidget {
   const TileClientVisit({
     Key? key,
-    required this.name,
-    required this.address,
+    required this.client,
   }) : super(key: key);
 
-  final String name;
-  final String address;
+  final Client client;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,7 @@ class TileClientVisit extends StatelessWidget {
               SizedBox(
                 width: Dimensions.width160,
                 child: Text(
-                  name,
+                  client.customerName ?? 'Not Available',
                   style: TextStyle(
                       fontSize: Dimensions.fontSize20,
                       fontWeight: FontWeight.w500,
@@ -42,7 +41,7 @@ class TileClientVisit extends StatelessWidget {
                 ),
               ),
               Text(
-                address,
+                client.location ?? 'Not Available',
                 style: TextStyle(
                     fontSize: Dimensions.fontSize12,
                     fontWeight: FontWeight.w300,
@@ -51,14 +50,16 @@ class TileClientVisit extends StatelessWidget {
               ),
             ],
           ),
-          Spacer(),
+          const Spacer(),
           Container(
             decoration: BoxDecoration(
                 color: AppColors.acccentColor,
                 borderRadius: BorderRadius.circular(Dimensions.radius10 / 2)),
             child: TextButton(
               onPressed: () {
-                Get.to(() => VisitClient());
+                Get.to(() => VisitClient(
+                      client: client,
+                    ));
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

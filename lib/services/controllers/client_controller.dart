@@ -15,9 +15,8 @@ class ClientController extends GetxController {
 
   @override
   void onInit() async {
-    await getProducts();
     await getClientList();
-
+    await getProducts();
     super.onInit();
   }
 
@@ -59,15 +58,18 @@ class ClientController extends GetxController {
   }
 
   Future<List<Product>?> getProducts() async {
-    Map<String, dynamic> params = {'EmployeeNo=': 'NG-971007'};
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    String employeeNo = sharedPreferences.getString('username')!;
+    Map<String, dynamic> params = {'EmployeeNo=': employeeNo};
 
-    String url = '${URL.PRODUCTS}${Uri(queryParameters: params).query}';
+    String url = '${URL.PRODUCTS}?EmployeeNo=NG-971007';
 
     Http.Response _response =
         await Http.get(Uri.parse(url), headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     });
-
+    print(_response.statusCode);
     if (_response.statusCode == 200) {
       productList = [];
       productList = productFromJson(_response.body);
@@ -83,7 +85,7 @@ class ClientController extends GetxController {
         await SharedPreferences.getInstance();
 
     String employeeNo = sharedPreferences.getString('username')!;
-    print(employeeNo);
+
     Map<String, dynamic> params = {'EmployeeNo': employeeNo};
 
     String url = '${URL.CLIENT_LIST}${Uri(queryParameters: params).query}';

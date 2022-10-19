@@ -49,96 +49,103 @@ class _ClientScreenState extends State<ClientScreen> {
 
   @override
   Widget build(BuildContext context) {
-    FocusScope.of(context).requestFocus(FocusNode());
     return Scaffold(
       body: SafeArea(
         child: Padding(
           padding: EdgeInsets.symmetric(
               horizontal: Dimensions.width20, vertical: Dimensions.height10),
-          child: ListView(
-            children: [
-              const TitlePage(
-                title: 'Client',
-              ),
-              kHeight20,
-              TextField(
-                controller: searchController,
-                onChanged: (value) {
-                  _runFilter(value.toLowerCase());
-                },
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.acccentColor),
-                    borderRadius: BorderRadius.circular(Dimensions.radius10),
-                  ),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: Dimensions.height10),
-                  hintStyle: TextStyle(color: AppColors.acccentColor),
-                  hintText: 'Search',
-                  prefixIcon: Icon(
-                    CupertinoIcons.search,
-                    color: AppColors.acccentColor,
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.acccentColor),
-                    borderRadius: BorderRadius.circular(Dimensions.radius10),
-                  ),
+          child: GestureDetector(
+            onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+            child: ListView(
+              children: [
+                const TitlePage(
+                  title: 'Client',
                 ),
-              ),
-              kHeight20,
-              Container(
-                decoration: BoxDecoration(
-                    color: AppColors.acccentColor,
-                    borderRadius:
-                        BorderRadius.circular(Dimensions.radius10 / 2)),
-                child: TextButton(
-                  onPressed: () async {
-                    Get.to(() => AddClient());
+                kHeight20,
+                TextField(
+                  keyboardType: TextInputType.text,
+                  controller: searchController,
+                  onChanged: (value) {
+                    _runFilter(value.toLowerCase());
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.add,
-                            color: AppColors.backgroundColor,
-                          ),
-                          kWidth10,
-                          Text(
-                            "Add Client",
-                            style: TextStyle(
-                                color: AppColors.backgroundColor,
-                                fontSize: Dimensions.fontSize16),
-                          ),
-                        ],
-                      ),
-                    ],
+                  decoration: InputDecoration(
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.acccentColor),
+                      borderRadius: BorderRadius.circular(Dimensions.radius10),
+                    ),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: Dimensions.height10),
+                    hintStyle: TextStyle(color: AppColors.acccentColor),
+                    hintText: 'Search',
+                    prefixIcon: Icon(
+                      CupertinoIcons.search,
+                      color: AppColors.acccentColor,
+                    ),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: AppColors.acccentColor),
+                      borderRadius: BorderRadius.circular(Dimensions.radius10),
+                    ),
                   ),
                 ),
-              ),
-              kHeight20,
-              Obx(
-                () => ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return TileClientVisit(
-                        name: _foundClients[index].customerName ??
-                            'Not Available',
-                        address:
-                            _foundClients[index].location ?? 'Not Available',
-                      );
+                kHeight20,
+                Container(
+                  decoration: BoxDecoration(
+                      color: AppColors.acccentColor,
+                      borderRadius:
+                          BorderRadius.circular(Dimensions.radius10 / 2)),
+                  child: TextButton(
+                    onPressed: () async {
+                      ClientController clientController = Get.find();
+                      await clientController.getProducts();
+                      Get.to(() => AddClient());
                     },
-                    separatorBuilder: (context, index) {
-                      return kHeight10;
-                    },
-                    itemCount: _foundClients.length),
-              )
-            ],
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.add,
+                              color: AppColors.backgroundColor,
+                            ),
+                            kWidth10,
+                            Text(
+                              "Add Client",
+                              style: TextStyle(
+                                  color: AppColors.backgroundColor,
+                                  fontSize: Dimensions.fontSize16),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                kHeight20,
+                Obx(
+                  () => ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return TileClientVisit(client: _foundClients[index]);
+                      },
+                      separatorBuilder: (context, index) {
+                        return kHeight10;
+                      },
+                      itemCount: _foundClients.length),
+                )
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  _myfocusNode() {
+    FocusScopeNode currentFocus = FocusScope.of(context);
+    if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
+      FocusManager.instance.primaryFocus?.unfocus();
+    }
   }
 }

@@ -24,6 +24,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         ClientController clientController = Get.find();
 
         await clientController.getClientList();
+
         Get.off(() => const MainScreen());
       } else {
         Get.off(() => LoginScreen());

@@ -9,6 +9,8 @@ import 'package:novanas/screens/core/widget/subtitle_text.dart';
 import 'package:novanas/screens/core/widget/title_page.dart';
 import 'package:novanas/services/controllers/client_controller.dart';
 import '../core/colors.dart';
+import '../core/widget/swipe_button.dart';
+import 'check_out_client.dart';
 
 class AddClient extends StatefulWidget {
   AddClient({Key? key}) : super(key: key);
@@ -29,6 +31,26 @@ class _AddClientState extends State<AddClient> {
   final _formKey = GlobalKey<FormState>();
 
   DateTime? estimatedDateValue;
+
+  Future<void> AddClientFunc() async {
+    if (_formKey.currentState!.validate()) {
+      if (widget.selectedProduct == null) {
+        Get.snackbar('Select Product', 'From the List');
+      } else {
+        Map<String, dynamic> dataBody = {
+          "CustomerName": nameController.text,
+          "ContactPerson": contactPersonController.text,
+          "Designation": designationController.text,
+          "Location": locationController.text,
+          "Product": widget.selectedProduct,
+          "EstimatedDateofVisit": estimatedDateValue.toString(),
+          "ActualDateofVisit": estimatedDateValue.toString(),
+        };
+
+        await clientController.insertClient(dataBody);
+      }
+    }
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     TimeOfDay selectedTime = TimeOfDay.now();
@@ -72,6 +94,8 @@ class _AddClientState extends State<AddClient> {
       String name = element.name ?? '';
       allProductNameList.add(name);
     });
+
+    print(allProductNameList);
 
     return Scaffold(
       appBar: AppBar(
@@ -194,6 +218,9 @@ class _AddClientState extends State<AddClient> {
                     ),
                     kWidth20,
                     DropdownButton<String>(
+                      onTap: () async {
+                        await clientController.getProducts();
+                      },
                       iconEnabledColor: AppColors.acccentColor,
                       focusColor: AppColors.backgroundColor,
                       hint: Text(
@@ -278,29 +305,15 @@ class _AddClientState extends State<AddClient> {
                         BorderRadius.circular(Dimensions.radius10 / 2)),
                 child: TextButton(
                   onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      if (widget.selectedProduct == null) {
-                        Get.snackbar('Select Product', 'From the List');
-                      } else {
-                        Map<String, dynamic> dataBody = {
-                          "CustomerName": nameController.text,
-                          "ContactPerson": contactPersonController.text,
-                          "Designation": designationController.text,
-                          "Location": locationController.text,
-                          "Product": widget.selectedProduct,
-                          "EstimatedDateofVisit": estimatedDateValue.toString(),
-                          "ActualDateofVisit": estimatedDateValue.toString(),
-                        };
-
-                        await clientController.insertClient(dataBody);
-                      }
-                    }
+                    setState(() {
+                      AddClientFunc();
+                    });
                   },
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Add Client",
+                        "ADD CLIENT",
                         style: TextStyle(
                             color: AppColors.backgroundColor,
                             fontSize: Dimensions.fontSize18),
@@ -308,7 +321,8 @@ class _AddClientState extends State<AddClient> {
                     ],
                   ),
                 ),
-              )
+              ),
+              kHeight30,
             ],
           ),
         ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:novanas/screens/client/check_out_client.dart';
 
 import '../colors.dart';
 import '../dimensions.dart';
@@ -56,7 +58,9 @@ class TileCheckInOut extends StatelessWidget {
                 color: AppColors.acccentColor,
                 borderRadius: BorderRadius.circular(Dimensions.radius10 / 2)),
             child: TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Get.to(() => const CheckOutClient());
+              },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

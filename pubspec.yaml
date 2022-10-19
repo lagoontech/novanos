@@ -8,13 +8,13 @@ version: 1.0.0+1
 environment:
   sdk: ">=2.17.3 <3.0.0"
 
-
 dependencies:
   connectivity: ^3.0.6
   cupertino_icons: ^1.0.2
   dio: ^4.0.6
   flutter:
     sdk: flutter
+  flutter_launcher_icons: ^0.10.0
   get: ^4.6.5
   google_fonts: ^3.0.1
   hive: ^2.2.3
@@ -23,7 +23,7 @@ dependencies:
   intl: ^0.17.0
   persistent_bottom_nav_bar: ^5.0.2
   shared_preferences: ^2.0.15
-  flutter_launcher_icons: ^0.10.0
+  swipebuttonflutter: ^1.0.0
 
 dev_dependencies:
   flutter_lints: ^2.0.0
@@ -49,7 +49,6 @@ flutter_icons:
 flutter:
 
   uses-material-design: true
- 
 
   assets:
     - assets/images/
