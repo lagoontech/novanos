@@ -1,6 +1,9 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:local_auth/local_auth.dart';
 import 'package:novanas/models/profile.dart';
 import 'package:novanas/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,6 +15,11 @@ import '../auth_service.dart';
 
 class LoginController extends GetxController {
   List<Profile> profileDetails = [];
+  var isLoading = false.obs;
+  RxBool? canCheckBiometrics;
+  final _authorized = 'Not Authorized'.obs;
+  var isAuthenticating = false.obs;
+  var authenticated = false.obs;
 
   @override
   void onInit() async {
@@ -109,6 +117,36 @@ class LoginController extends GetxController {
       return profileDetails;
     } else {
       return null;
+    }
+  }
+
+  Future<bool> authenticate() async {
+    final LocalAuthentication auth = LocalAuthentication();
+
+    try {
+      isAuthenticating.value = true;
+      _authorized.value = 'Authenticating';
+
+      authenticated.value = await auth.authenticate(
+        localizedReason: 'Let OS determine authentication method',
+        options: const AuthenticationOptions(
+            stickyAuth: true, useErrorDialogs: true),
+      );
+
+      isAuthenticating.value = false;
+    } on PlatformException catch (e) {
+      print(e);
+
+      isAuthenticating.value = false;
+      _authorized.value = 'Error - ${e.message}';
+    }
+
+    _authorized.value = authenticated.value ? 'Authorized' : 'Not Authorized';
+
+    if (authenticated.value) {
+      return true;
+    } else {
+      return false;
     }
   }
 }

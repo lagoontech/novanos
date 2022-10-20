@@ -7,18 +7,15 @@ import 'package:novanas/screens/core/dimensions.dart';
 import 'package:novanas/screens/core/widget/profile_data_field.dart';
 
 import 'package:novanas/screens/core/widget/title_page.dart';
-import 'package:novanas/screens/main_screen.dart';
 import 'package:novanas/services/controllers/client_controller.dart';
 import 'package:novanas/services/controllers/login_controller.dart';
 import 'package:novanas/services/date_service.dart';
-
-import '../auth/login_screen.dart';
 import '../core/colors.dart';
 import '../core/widget/visit_data_field.dart';
 
-class VisitClient extends StatelessWidget {
+class ScheduleVisitClient extends StatelessWidget {
   final Client client;
-  VisitClient({Key? key, required this.client}) : super(key: key);
+  ScheduleVisitClient({Key? key, required this.client}) : super(key: key);
 
   TextEditingController commentController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -111,11 +108,10 @@ class VisitClient extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Check In",
+                        "Schedule Visit",
                         style: TextStyle(
-                          color: AppColors.backgroundColor,
-                          fontSize: Dimensions.fontSize18,
-                        ),
+                            color: AppColors.backgroundColor,
+                            fontSize: Dimensions.fontSize18),
                       ),
                     ],
                   ),

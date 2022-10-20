@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:novanas/screens/client/check_out_client.dart';
-
 import '../colors.dart';
 import '../dimensions.dart';
 
@@ -10,12 +7,14 @@ class TileCheckInOut extends StatelessWidget {
     Key? key,
     required this.name,
     required this.address,
-    required this.Status,
+    required this.status,
+    required this.checkFunc,
   }) : super(key: key);
 
   final String name;
   final String address;
-  final String Status;
+  final String status;
+  final Function checkFunc;
 
   @override
   Widget build(BuildContext context) {
@@ -59,13 +58,13 @@ class TileCheckInOut extends StatelessWidget {
                 borderRadius: BorderRadius.circular(Dimensions.radius10 / 2)),
             child: TextButton(
               onPressed: () {
-                Get.to(() => const CheckOutClient());
+                checkFunc();
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    Status,
+                    status,
                     style: TextStyle(
                         color: AppColors.backgroundColor,
                         fontWeight: FontWeight.w700,

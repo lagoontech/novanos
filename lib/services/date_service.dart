@@ -6,4 +6,10 @@ class DateService {
     var formatDate = formatter.format(date);
     return formatDate;
   }
+
+  static String? getFormatedhypenDate(DateTime date) {
+    DateFormat formatter = DateFormat('MM-dd-yyyy');
+    var formatDate = formatter.format(date);
+    return formatDate;
+  }
 }

@@ -4,7 +4,10 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:novanas/services/controllers/client_controller.dart';
 
+import '../helper/constant.dart';
 import '../services/auth_service.dart';
+import '../services/controllers/summary_client.dart';
+import '../services/location_services.dart';
 import 'auth/login_screen.dart';
 import 'main_screen.dart';
 
@@ -22,9 +25,10 @@ class _LoadingScreenState extends State<LoadingScreen> {
       var islogin = await AuthService().getAuthentication();
       if (islogin) {
         ClientController clientController = Get.find();
-
+        SummaryController summaryController = Get.find();
+        await summaryController.getSummaryReport();
         await clientController.getClientList();
-
+        await LocationService().getCurrentPosition();
         Get.off(() => const MainScreen());
       } else {
         Get.off(() => LoginScreen());

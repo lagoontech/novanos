@@ -2,20 +2,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:novanas/models/leadsource.dart';
 import 'package:novanas/models/product.dart';
 import 'package:novanas/screens/core/constants.dart';
 import 'package:novanas/screens/core/dimensions.dart';
-import 'package:novanas/screens/core/widget/subtitle_text.dart';
 import 'package:novanas/screens/core/widget/title_page.dart';
 import 'package:novanas/services/controllers/client_controller.dart';
 import '../core/colors.dart';
-import '../core/widget/swipe_button.dart';
-import 'check_out_client.dart';
 
 class AddClient extends StatefulWidget {
   AddClient({Key? key}) : super(key: key);
 
   String? selectedProduct;
+  String? selectedLeadSource;
 
   @override
   State<AddClient> createState() => _AddClientState();
@@ -26,13 +25,12 @@ class _AddClientState extends State<AddClient> {
   TextEditingController contactPersonController = TextEditingController();
   TextEditingController designationController = TextEditingController();
   TextEditingController locationController = TextEditingController();
-  TextEditingController leadSourceController = TextEditingController();
   TextEditingController dateController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   DateTime? estimatedDateValue;
 
-  Future<void> AddClientFunc() async {
+  Future<void> addClientFunc() async {
     if (_formKey.currentState!.validate()) {
       if (widget.selectedProduct == null) {
         Get.snackbar('Select Product', 'From the List');
@@ -90,12 +88,19 @@ class _AddClientState extends State<AddClient> {
   Widget build(BuildContext context) {
     List<Product>? allproductList = clientController.productList;
     List<String> allProductNameList = [];
+    List<LeadSource>? allLeadsourceList = clientController.leadsourceList;
+    List<String> allLeadSourceNameList = [];
     allproductList.forEach((element) {
       String name = element.name ?? '';
       allProductNameList.add(name);
     });
 
-    print(allProductNameList);
+    allLeadsourceList.forEach((element) {
+      String name = element.name ?? '';
+      allLeadSourceNameList.add(name);
+    });
+
+    print(allLeadSourceNameList);
 
     return Scaffold(
       appBar: AppBar(
@@ -273,27 +278,43 @@ class _AddClientState extends State<AddClient> {
                 ),
               ),
               kHeight20,
-              TextFormField(
-                controller: leadSourceController,
-                validator: (value) =>
-                    value!.isEmpty ? 'Lead Source cannot be blank' : null,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.acccentColor),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: Dimensions.width10),
+                decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(Dimensions.radius10),
-                  ),
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: Dimensions.height10),
-                  hintStyle: TextStyle(color: AppColors.acccentColor),
-                  hintText: 'Lead Source',
-                  prefixIcon: Icon(
-                    CupertinoIcons.sort_up_circle,
-                    color: AppColors.acccentColor,
-                  ),
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide(color: AppColors.acccentColor),
-                    borderRadius: BorderRadius.circular(Dimensions.radius10),
-                  ),
+                    border: Border.all(color: AppColors.acccentColor)),
+                child: Row(
+                  children: [
+                    Icon(
+                      CupertinoIcons.sort_up_circle,
+                      color: AppColors.acccentColor,
+                    ),
+                    kWidth20,
+                    DropdownButton<String>(
+                      onTap: () async {
+                        await clientController.getLeadSource();
+                      },
+                      iconEnabledColor: AppColors.acccentColor,
+                      focusColor: AppColors.backgroundColor,
+                      hint: Text(
+                        'Select The Lead Source',
+                        style: TextStyle(color: AppColors.acccentColor),
+                      ),
+                      value: widget.selectedLeadSource,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          widget.selectedLeadSource = newValue!;
+                          print(widget.selectedLeadSource);
+                        });
+                      },
+                      items: allLeadSourceNameList.map((String? value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value!),
+                        );
+                      }).toList(),
+                    )
+                  ],
                 ),
               ),
               kHeight30,
@@ -306,7 +327,7 @@ class _AddClientState extends State<AddClient> {
                 child: TextButton(
                   onPressed: () async {
                     setState(() {
-                      AddClientFunc();
+                      addClientFunc();
                     });
                   },
                   child: Row(

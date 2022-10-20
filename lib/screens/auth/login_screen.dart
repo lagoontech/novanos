@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:novanas/screens/core/colors.dart';
 import 'package:novanas/screens/core/constants.dart';
 import 'package:novanas/screens/core/dimensions.dart';
 import 'package:novanas/screens/loading_screen.dart';
-import 'package:novanas/screens/main_screen.dart';
 import 'package:novanas/services/controllers/login_controller.dart';
 
 import '../core/widget/title_page.dart';
@@ -68,10 +68,16 @@ class _LoginScreenState extends State<LoginScreen> {
             children: [
               const TitlePage(title: 'Sign In'),
               Image.asset(
-                'assets/images/company_logo.png',
-                width: 200,
-                height: 200,
+                'assets/images/logo.png',
+                width: 150,
+                height: 150,
               ),
+              // SvgPicture.asset(
+              //   'assets/svgs/logo.svg',
+              //   semanticsLabel: 'Main Logo',
+              //   color: AppColors.primaryColor,
+              //   height: Dimensions.height100 + Dimensions.height75,
+              // ),
               kHeight30,
               TextFormField(
                 onChanged: (value) => getdata(),

@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:novanas/models/client.dart';
+import 'package:novanas/screens/client/visit_client.dart';
 import 'package:novanas/screens/core/constants.dart';
 import 'package:novanas/screens/core/dimensions.dart';
 import 'package:novanas/screens/core/widget/subtitle_text.dart';
+import '../client/check_out_client.dart';
 import '../core/colors.dart';
 import '../core/widget/tile_check_in_out.dart';
 import '../core/widget/tile_next_tile.dart';
@@ -9,6 +13,16 @@ import '../core/widget/title_page.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key? key}) : super(key: key);
+
+  checkIn(Client client) {
+    Get.to(() => VisitClient(
+          client: client,
+        ));
+  }
+
+  checkOut() {
+    Get.to(() => const CheckOutClient());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,11 +48,13 @@ class DashboardScreen extends StatelessWidget {
                       color: AppColors.acccentColor),
                 ),
                 kHeight10,
-                const TileCheckInOut(
-                  name: 'MNC HOSPITAL',
-                  address: 'Deira, Dubai',
-                  Status: 'Check-Out',
-                )
+                TileCheckInOut(
+                    name: 'MNC HOSPITAL',
+                    address: 'Deira, Dubai',
+                    status: 'Check-OUT',
+                    checkFunc: () {
+                      checkOut();
+                    })
               ],
             ),
             kHeight30,
@@ -49,7 +65,7 @@ class DashboardScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Next Client',
+                      "Todays Client",
                       maxLines: 2,
                       style: TextStyle(
                           overflow: TextOverflow.ellipsis,
@@ -75,15 +91,16 @@ class DashboardScreen extends StatelessWidget {
                 ),
                 kHeight10,
                 ListView.separated(
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      return const NextClient(
+                      return TileCheckInOut(
                         name: 'MNC HOSPITAL',
                         address: 'Deira, Dubai',
-                        Status: 'Check-Out',
-                        checkDay: 'Today',
-                        checkTime: '12.00 PM',
+                        status: 'VISIT',
+                        checkFunc: () {
+                          checkOut();
+                        },
                       );
                     },
                     separatorBuilder: (context, index) {

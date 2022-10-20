@@ -12,10 +12,14 @@ class URL {
   static String LEAVE_REQUEST = "$BASE_URL/api/Leave/LeaveInsert";
   static String MANUAL_REQUEST = "$BASE_URL/api/ManualEntry/ManualEntryInsert";
   static String PRIVACY = "https://lagoontechnologies.com/privacy-policy-3";
+  static String SUMMARY_REPORT_LIST = '$BASE_URL/api/SummaryReport/Report?';
 
 // client
   static String INSERT_CLIENT = '$BASE_URL/api/Customer/CustomerInsert';
+  static String LEAD_SOURCE_LIST = '$BASE_URL/api/Customer/LeadSourceList?';
 
-  static String PRODUCTS = '$BASE_URL/api/Customer/ProductDetails';
+  static String PRODUCTS = '$BASE_URL/api/Customer/ProductDetails?';
   static String CLIENT_LIST = '$BASE_URL/api/Customer/CustomerList?';
+  // check api url
+  static String CHECK = '$BASE_URL/api/CheckInOut/ClientVisitInsert';
 }

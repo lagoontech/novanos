@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:novanas/helper/main_binding.dart';
 import 'package:novanas/screens/core/colors.dart';
 import 'package:novanas/screens/loading_screen.dart';
+import 'package:novanas/services/location_services.dart';
 import 'helper/get_di.dart' as di;
 import 'package:hive_flutter/hive_flutter.dart';
 

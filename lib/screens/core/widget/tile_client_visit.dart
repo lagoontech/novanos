@@ -70,7 +70,7 @@ class TileClientVisit extends StatelessWidget {
                   ),
                   kWidth10,
                   Text(
-                    'VISIT',
+                    'Schedule Visit',
                     style: TextStyle(
                         color: AppColors.backgroundColor,
                         fontWeight: FontWeight.w700,
