@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:novanas/models/client.dart';
@@ -65,7 +66,7 @@ class TileClientVisit extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    Icons.add_alert,
+                    CupertinoIcons.clock_fill,
                     color: AppColors.backgroundColor,
                   ),
                   kWidth10,

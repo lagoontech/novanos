@@ -1,11 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:novanas/models/client.dart';
 import 'package:novanas/screens/core/constants.dart';
 import 'package:novanas/screens/core/dimensions.dart';
-import 'package:novanas/screens/core/widget/profile_data_field.dart';
-
 import 'package:novanas/screens/core/widget/title_page.dart';
 import 'package:novanas/services/controllers/client_controller.dart';
 import 'package:novanas/services/controllers/login_controller.dart';
@@ -18,9 +17,44 @@ class ScheduleVisitClient extends StatelessWidget {
   ScheduleVisitClient({Key? key, required this.client}) : super(key: key);
 
   TextEditingController commentController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   ClientController clientController = Get.find();
   LoginController loginController = Get.find();
+
+  DateTime? estimatedDateValue;
+
+  Future<void> _selectDate(BuildContext context) async {
+    TimeOfDay selectedTime = TimeOfDay.now();
+    final DateTime? d = await showDatePicker(
+      //we wait for the dialog to return
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2030),
+      initialEntryMode: DatePickerEntryMode.calendar,
+
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColors.acccentColor, // <-- SEE HERE
+              onPrimary: AppColors.backgroundColor, // <-- SEE HERE
+              onSurface: AppColors.acccentColor, // <-- SEE HERE
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                primary: AppColors.acccentColor, // button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    dateController.text = DateFormat.yMd().format(d!);
+    estimatedDateValue = d;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +88,34 @@ class ScheduleVisitClient extends StatelessWidget {
               VisitDataField(
                   title: 'Product', value: client.product ?? "Not avaiable"),
               kHeight20,
-              VisitDataField(
-                  title: 'Esitmated Date of visit',
-                  value: DateService.getFormatedSlashDate(
-                          client.estimatedDateofVisit!) ??
-                      "Not avaiable"),
+              TextFormField(
+                controller: dateController,
+                validator: (value) => value!.isEmpty
+                    ? 'Estimated Date of Visit cannot be blank'
+                    : null,
+                readOnly: true,
+                onTap: () {
+                  _selectDate(context);
+                },
+                decoration: InputDecoration(
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.acccentColor),
+                    borderRadius: BorderRadius.circular(Dimensions.radius10),
+                  ),
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: Dimensions.height10),
+                  hintStyle: TextStyle(color: AppColors.acccentColor),
+                  hintText: 'Estimated Date of Visit',
+                  prefixIcon: Icon(
+                    CupertinoIcons.calendar,
+                    color: AppColors.acccentColor,
+                  ),
+                  border: OutlineInputBorder(
+                    borderSide: BorderSide(color: AppColors.acccentColor),
+                    borderRadius: BorderRadius.circular(Dimensions.radius10),
+                  ),
+                ),
+              ),
               kHeight20,
               TextFormField(
                 validator: (value) =>
