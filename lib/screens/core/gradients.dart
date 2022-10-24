@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'colors.dart';
-
 LinearGradient kWelcomeBackgroundGradient = const LinearGradient(
   begin: Alignment(-0.7458379864692688, -0.05771365016698837),
   end: Alignment(0.05771365016698837, -0.05470772832632065),

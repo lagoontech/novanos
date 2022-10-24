@@ -32,9 +32,10 @@ class _AddClientState extends State<AddClient> {
 
   Future<void> addClientFunc() async {
     if (_formKey.currentState!.validate()) {
-      if (widget.selectedProduct == null) {
-        Get.snackbar('Select Product', 'From the List');
+      if (widget.selectedProduct == null || widget.selectedLeadSource == null) {
+        Get.snackbar('Select Fields', 'From the List');
       } else {
+        print(widget.selectedLeadSource.toString());
         Map<String, dynamic> dataBody = {
           "CustomerName": nameController.text,
           "ContactPerson": contactPersonController.text,
@@ -43,8 +44,9 @@ class _AddClientState extends State<AddClient> {
           "Product": widget.selectedProduct,
           "EstimatedDateofVisit": estimatedDateValue.toString(),
           "ActualDateofVisit": estimatedDateValue.toString(),
+          "LeadSource": widget.selectedLeadSource.toString(),
         };
-
+        print(dataBody);
         await clientController.insertClient(dataBody);
       }
     }
@@ -99,8 +101,6 @@ class _AddClientState extends State<AddClient> {
       String name = element.name ?? '';
       allLeadSourceNameList.add(name);
     });
-
-    print(allLeadSourceNameList);
 
     return Scaffold(
       appBar: AppBar(
@@ -210,45 +210,6 @@ class _AddClientState extends State<AddClient> {
                 ),
               ),
               kHeight20,
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: Dimensions.width10),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(Dimensions.radius10),
-                    border: Border.all(color: AppColors.acccentColor)),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.production_quantity_limits,
-                      color: AppColors.acccentColor,
-                    ),
-                    kWidth20,
-                    DropdownButton<String>(
-                      onTap: () async {
-                        await clientController.getProducts();
-                      },
-                      iconEnabledColor: AppColors.acccentColor,
-                      focusColor: AppColors.backgroundColor,
-                      hint: Text(
-                        'Select The Product',
-                        style: TextStyle(color: AppColors.acccentColor),
-                      ),
-                      value: widget.selectedProduct,
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          widget.selectedProduct = newValue!;
-                        });
-                      },
-                      items: allProductNameList.map((String? value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value!),
-                        );
-                      }).toList(),
-                    )
-                  ],
-                ),
-              ),
-              kHeight20,
               TextFormField(
                 controller: dateController,
                 validator: (value) => value!.isEmpty
@@ -286,6 +247,47 @@ class _AddClientState extends State<AddClient> {
                 child: Row(
                   children: [
                     Icon(
+                      Icons.production_quantity_limits,
+                      color: AppColors.acccentColor,
+                    ),
+                    kWidth20,
+                    DropdownButton<String>(
+                      onTap: () async {
+                        await clientController.getProducts();
+                      },
+                      iconEnabledColor: AppColors.acccentColor,
+                      focusColor: AppColors.backgroundColor,
+                      hint: Text(
+                        'Select The Product',
+                        style: TextStyle(color: AppColors.acccentColor),
+                      ),
+                      value: widget.selectedProduct,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          widget.selectedProduct = newValue!;
+                        });
+                      },
+                      items: allProductNameList.map(
+                        (String? value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value!),
+                          );
+                        },
+                      ).toList(),
+                    )
+                  ],
+                ),
+              ),
+              kHeight20,
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: Dimensions.width10),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(Dimensions.radius10),
+                    border: Border.all(color: AppColors.acccentColor)),
+                child: Row(
+                  children: [
+                    Icon(
                       CupertinoIcons.sort_up_circle,
                       color: AppColors.acccentColor,
                     ),
@@ -304,7 +306,6 @@ class _AddClientState extends State<AddClient> {
                       onChanged: (String? newValue) {
                         setState(() {
                           widget.selectedLeadSource = newValue!;
-                          print(widget.selectedLeadSource);
                         });
                       },
                       items: allLeadSourceNameList.map((String? value) {

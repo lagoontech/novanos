@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:novanas/screens/core/colors.dart';
@@ -121,7 +120,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       onChanged: (value) {
                         setState(() {
                           widget.isChecked = value!;
-                          print(widget.isChecked);
                         });
                       }),
                   Text(
@@ -146,7 +144,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       if (widget.isChecked) {
-                        print('working');
                         box1.put('username', userNameController.value.text);
                         box1.put('password', passWordController.value.text);
                       } else {

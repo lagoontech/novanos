@@ -51,7 +51,7 @@ class TileCheckInOut extends StatelessWidget {
               ),
             ],
           ),
-          Spacer(),
+          const Spacer(),
           Container(
             decoration: BoxDecoration(
                 color: AppColors.acccentColor,

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:novanas/services/controllers/client_controller.dart';
 
-import '../helper/constant.dart';
 import '../services/auth_service.dart';
-import '../services/controllers/summary_client.dart';
+import '../services/controllers/summary_conrtoller.dart';
 import '../services/location_services.dart';
 import 'auth/login_screen.dart';
 import 'main_screen.dart';

@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:novanas/screens/core/constants.dart';
-import 'package:novanas/screens/core/widget/subtitle_text.dart';
-
 import '../colors.dart';
 import '../dimensions.dart';
 

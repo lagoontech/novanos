@@ -29,9 +29,10 @@ class VisitDataField extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           Container(
-              width: Dimensions.width90,
+              width: Dimensions.width90 + Dimensions.width30,
               padding: EdgeInsets.symmetric(
-                  horizontal: Dimensions.width10, vertical: Dimensions.height5),
+                  horizontal: Dimensions.width10 / 2,
+                  vertical: Dimensions.height5),
               alignment: Alignment.center,
               decoration: BoxDecoration(
                   color: AppColors.primaryColor,
@@ -45,9 +46,11 @@ class VisitDataField extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                     color: AppColors.backgroundColor),
               )),
-          kWidth10,
-          SizedBox(
-              width: Dimensions.width160, child: SubTitleText(subTitle: value)),
+          Container(
+              padding: EdgeInsets.symmetric(
+                  horizontal: Dimensions.width10, vertical: Dimensions.height5),
+              width: Dimensions.width160,
+              child: SubTitleText(subTitle: value)),
         ],
       ),
     );

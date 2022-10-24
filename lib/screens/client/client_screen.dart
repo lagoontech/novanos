@@ -131,6 +131,9 @@ class _ClientScreenState extends State<ClientScreen> {
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
+                      ClientController clientController = Get.find();
+                      clientController.getLeadSource();
+                      clientController.getProducts();
                       return TileClientVisit(client: _foundClients[index]);
                     },
                     separatorBuilder: (context, index) {

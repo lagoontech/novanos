@@ -1,16 +1,22 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as Http;
 import 'package:novanas/helper/constant.dart';
 import 'package:novanas/models/client.dart';
 import 'package:novanas/models/leadsource.dart';
+import 'package:novanas/models/next_visit.dart';
 import 'package:novanas/models/product.dart';
 import 'package:novanas/screens/loading_screen.dart';
+import 'package:novanas/screens/main_screen.dart';
+import 'package:novanas/services/controllers/dashboard_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../helper/connectivity_manager.dart';
+import '../../models/checkin.dart';
 import '../api_urls.dart';
+import 'summary_conrtoller.dart';
 
 class ClientController extends GetxController {
   List<Product> productList = [];
@@ -35,11 +41,14 @@ class ClientController extends GetxController {
           },
           body: jsonEncode(dataBody),
         );
-        print(response.statusCode);
+
         if (response.statusCode == 200 ||
             response.statusCode == 201 ||
             response.statusCode == 202) {
           await getClientList();
+          DashBoardController dashBoardController = Get.find();
+          await dashBoardController.getCheckInClients();
+          await dashBoardController.getNextClient();
           Get.off(() => LoadingScreen());
           print('woirkung');
 
@@ -133,10 +142,10 @@ class ClientController extends GetxController {
     }
   }
 
-  Future<void> checkVisit({
+  Future<void> checkInVisit({
     required String checkStatus,
     required String checkComment,
-    required Client client,
+    required NextVisit nextVisit,
   }) async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
@@ -149,19 +158,21 @@ class ClientController extends GetxController {
       "Longitude": Constants.currentPosition!.longitude,
       "CheckType": checkStatus,
       "CheckTime": DateTime.now().toString(),
-      "ClientName": client.customerName,
-      "ContactPerson": client.contactPerson.toString(),
-      "Designation": client.designation.toString(),
-      "Location": Constants.currentAddress,
-      "Product": client.product.toString(),
-      "EstimatedDateOfVisit": client.estimatedDateofVisit.toString(),
+      "ClientName": nextVisit.customerName,
+      "ContactPerson": nextVisit.contactPerson.toString(),
+      "Designation": nextVisit.designation.toString(),
+      "Location": nextVisit.location.toString(),
+      "CheckTimeLocation": Constants.currentAddress,
+      "Product": nextVisit.product.toString(),
+      "EstimatedDateOfVisit": nextVisit.estimatedDateOfVisit.toString(),
       "Comment": checkComment,
-      "ClientId": client.id.toString(),
+      "LeadSource": nextVisit.leadSource.toString(),
+      "ClientId": nextVisit.id.toString(),
     };
 
     if (await ConnectivityManager.connected()) {
       try {
-        String url = URL.CHECK;
+        String url = URL.CHECK_IN;
         var response = await Http.post(
           Uri.parse(url),
           headers: <String, String>{
@@ -169,16 +180,128 @@ class ClientController extends GetxController {
           },
           body: jsonEncode(dataBody),
         );
-        print(response.statusCode);
+
         if (response.statusCode == 200 ||
             response.statusCode == 201 ||
             response.statusCode == 202) {
-          Get.back();
-          print('woirkung');
+          await getClientList();
+
+          DashBoardController dashBoardController = Get.find();
+          await dashBoardController.getCheckInClients();
+          await dashBoardController.getNextClient();
+          Get.off(() => const MainScreen());
+          Get.snackbar(
+            'Successfuly',
+            "CheckIN",
+          );
+        }
+      } catch (e) {
+        Get.snackbar(
+          "Try Again",
+          "Something went wrong, Please try again!",
+        );
+      }
+    } else {
+      Get.snackbar(
+        'Connection failed',
+        "No Internet connection",
+      );
+    }
+  }
+
+  Future<void> checkOutVisit({
+    required String checkStatus,
+    required String checkComment,
+    required CheckIn checkInClient,
+  }) async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+
+    String employeeNo = sharedPreferences.getString('username')!;
+
+    Map<String, dynamic> dataBody = {
+      "Latitude": Constants.currentPosition!.latitude,
+      "Longitude": Constants.currentPosition!.longitude,
+      "CheckType": "1",
+      "CheckTime": DateTime.now().toString(),
+      "ClientName": checkInClient.customerName,
+      "ContactPerson": checkInClient.contactPerson.toString(),
+      "Designation": checkInClient.designation.toString(),
+      "Location": checkInClient.location,
+      "CheckTimeLocation": Constants.currentAddress,
+      "Product": checkInClient.product.toString(),
+      "EstimatedDateOfVisit": checkInClient.estimatedDateOfVisit.toString(),
+      "Comment": checkComment,
+      "TransactionId": checkInClient.transactionId.toString(),
+      "LeadSource": checkInClient.leadSource.toString(),
+      "ClientId": checkInClient.clientId.toString()
+    };
+
+    if (await ConnectivityManager.connected()) {
+      try {
+        String url = URL.CHECK_OUT;
+        var response = await Http.post(
+          Uri.parse(url),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(dataBody),
+        );
+
+        if (response.statusCode == 200 ||
+            response.statusCode == 201 ||
+            response.statusCode == 202) {
+          await getClientList();
+
+          DashBoardController dashBoardController = Get.find();
+          await dashBoardController.getCheckInClients();
+          await dashBoardController.getNextClient();
+          SummaryController summaryController = Get.find();
+          summaryController.getCheckOutSummary();
+          Get.off(() => const MainScreen());
+          Get.snackbar(
+            'Successfuly',
+            "CheckOUT",
+          );
+        }
+      } catch (e) {
+        Get.snackbar(
+          "Try Again",
+          "Something went wrong, Please try again!",
+        );
+      }
+    } else {
+      Get.snackbar(
+        'Connection failed',
+        "No Internet connection",
+      );
+    }
+  }
+
+  Future<void> scheduleClient(Map<String, dynamic> dataBody) async {
+    if (await ConnectivityManager.connected()) {
+      try {
+        String url = URL.SCHEDULE_CLIENT;
+        var response = await Http.post(
+          Uri.parse(url),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(dataBody),
+        );
+
+        if (response.statusCode == 200 ||
+            response.statusCode == 201 ||
+            response.statusCode == 202) {
+          await getClientList();
+          DashBoardController dashBoardController = Get.find();
+          await dashBoardController.getCheckInClients();
+          await dashBoardController.getNextClient();
+          Get.off(() => const MainScreen());
 
           Get.snackbar(
             'Successfully ',
-            "Checked IN",
+            "added Client",
           );
         }
       } catch (e) {

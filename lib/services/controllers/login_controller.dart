@@ -1,5 +1,3 @@
-import 'dart:ffi';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -8,6 +6,7 @@ import 'package:novanas/models/profile.dart';
 import 'package:novanas/models/user.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../helper/connectivity_manager.dart';
+import '../../helper/constant.dart';
 import '../api_urls.dart';
 import 'package:http/http.dart' as http;
 
@@ -32,29 +31,18 @@ class LoginController extends GetxController {
       {required String userName,
       required String passWord,
       BuildContext? context}) async {
-    String CheckType = "Android_IN";
-    if (Platform.isAndroid) {
-      CheckType = "Android_IN";
-    } else if (Platform.isIOS) {
-      CheckType = "IN";
-    }
-
-    String latitude = '3423234';
-    String longitude = '23434';
-    String loginLocation = '23434';
-
     Map<String, String> params = {
       'UserName': userName,
       'password': passWord,
-      'Loginlat': latitude,
-      'LoginLon': longitude,
-      'LoginLocation': 'loginLocation'
+      'Loginlat': '${Constants.currentPosition!.longitude}',
+      'LoginLon': '${Constants.currentPosition!.latitude}',
+      'LoginLocation': Constants.currentAddress ?? 'Not Available',
     };
 
     if (await ConnectivityManager.connected()) {
       try {
         String url_ = "${URL.LOGIN}${Uri(queryParameters: params).query}";
-        print(url_);
+
         final response = await http.get(
           Uri.parse(url_),
           headers: <String, String>{
@@ -99,7 +87,7 @@ class LoginController extends GetxController {
         await SharedPreferences.getInstance();
 
     String employeeNo = sharedPreferences.getString('username')!;
-    print(employeeNo);
+
     Map<String, dynamic> params = {'EmployeeNo': employeeNo};
 
     String url = '${URL.PROFILE}${Uri(queryParameters: params).query}';
@@ -108,12 +96,9 @@ class LoginController extends GetxController {
       'Content-Type': 'application/json; charset=UTF-8',
     });
 
-    print(response.statusCode);
-
     if (response.statusCode == 200) {
       profileDetails = [];
       profileDetails = profileFromJson(response.body);
-      print(profileDetails);
       return profileDetails;
     } else {
       return null;
@@ -135,8 +120,6 @@ class LoginController extends GetxController {
 
       isAuthenticating.value = false;
     } on PlatformException catch (e) {
-      print(e);
-
       isAuthenticating.value = false;
       _authorized.value = 'Error - ${e.message}';
     }

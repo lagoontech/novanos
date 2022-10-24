@@ -1,23 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:novanas/models/client.dart';
+import 'package:novanas/models/next_visit.dart';
 import 'package:novanas/screens/core/constants.dart';
 import 'package:novanas/screens/core/dimensions.dart';
-import 'package:novanas/screens/core/widget/profile_data_field.dart';
-
 import 'package:novanas/screens/core/widget/title_page.dart';
-import 'package:novanas/screens/main_screen.dart';
 import 'package:novanas/services/controllers/client_controller.dart';
 import 'package:novanas/services/controllers/login_controller.dart';
 import 'package:novanas/services/date_service.dart';
-
-import '../auth/login_screen.dart';
-import '../core/colors.dart';
-import '../core/widget/visit_data_field.dart';
+import '../../core/colors.dart';
+import '../../core/widget/visit_data_field.dart';
 
 class VisitClient extends StatelessWidget {
-  final Client client;
+  final NextVisit client;
   VisitClient({Key? key, required this.client}) : super(key: key);
 
   TextEditingController commentController = TextEditingController();
@@ -58,9 +53,13 @@ class VisitClient extends StatelessWidget {
                   title: 'Product', value: client.product ?? "Not avaiable"),
               kHeight20,
               VisitDataField(
+                  title: 'Lead Source',
+                  value: client.leadSource ?? "Not avaiable"),
+              kHeight20,
+              VisitDataField(
                   title: 'Esitmated Date of visit',
                   value: DateService.getFormatedSlashDate(
-                          client.estimatedDateofVisit!) ??
+                          client.estimatedDateOfVisit!) ??
                       "Not avaiable"),
               kHeight20,
               TextFormField(
@@ -99,9 +98,9 @@ class VisitClient extends StatelessWidget {
                       bool employeeAuthenticate =
                           await loginController.authenticate();
                       if (employeeAuthenticate) {
-                        await clientController.checkVisit(
+                        await clientController.checkInVisit(
                           checkComment: commentController.text,
-                          client: client,
+                          nextVisit: client,
                           checkStatus: 'IN',
                         );
                       }
