@@ -222,7 +222,7 @@ class ClientController extends GetxController {
       "TransactionId": checkInClient.transactionId.toString(),
       "LeadSource": checkInClient.leadSource.toString(),
       "ClientId": checkInClient.clientId.toString(),
-      "Employee": employeeNo.toString(),
+      "EmployeeId": employeeNo.toString(),
     };
 
     if (await ConnectivityManager.connected()) {
