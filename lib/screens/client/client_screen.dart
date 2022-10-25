@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:novanas/screens/core/constants.dart';
 import 'package:novanas/screens/core/dimensions.dart';
-import 'package:novanas/screens/loading_screen.dart';
+import 'package:novanas/screens/core/widget/empty_tile.dart';
 import '../../services/controllers/client_controller.dart';
 import '../core/colors.dart';
 import '../core/widget/tile_client_visit.dart';
 import '../core/widget/title_page.dart';
 import 'add_client.dart';
 
+// ignore: must_be_immutable
 class ClientScreen extends StatefulWidget {
   ClientScreen({Key? key}) : super(key: key);
   ClientController clientController = Get.find();
@@ -23,7 +24,7 @@ class _ClientScreenState extends State<ClientScreen> {
 
   TextEditingController searchController = TextEditingController();
 
-  var _foundClients = [].obs;
+  final _foundClients = [].obs;
   var allClientList = [].obs;
 
   @override
@@ -127,31 +128,28 @@ class _ClientScreenState extends State<ClientScreen> {
               ),
               kHeight20,
               Obx(
-                () => ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      ClientController clientController = Get.find();
-                      clientController.getLeadSource();
-                      clientController.getProducts();
-                      return TileClientVisit(client: _foundClients[index]);
-                    },
-                    separatorBuilder: (context, index) {
-                      return kHeight10;
-                    },
-                    itemCount: _foundClients.length),
+                () => _foundClients.isEmpty
+                    ? const EmptyTile(text: 'Client')
+                    : ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          ClientController clientController = Get.find();
+                          clientController.getLeadSource();
+                          clientController.getProducts();
+                          return TileClientVisit(client: _foundClients[index]);
+                        },
+                        separatorBuilder: (context, index) {
+                          return kHeight10;
+                        },
+                        itemCount:
+                            _foundClients.isEmpty ? 1 : _foundClients.length,
+                      ),
               )
             ],
           ),
         ),
       ),
     ));
-  }
-
-  _myfocusNode() {
-    FocusScopeNode currentFocus = FocusScope.of(context);
-    if (!currentFocus.hasPrimaryFocus && currentFocus.focusedChild != null) {
-      FocusManager.instance.primaryFocus?.unfocus();
-    }
   }
 }

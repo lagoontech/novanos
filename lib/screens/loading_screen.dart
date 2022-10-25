@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:novanas/screens/core/colors.dart';
+import 'package:novanas/screens/core/constants.dart';
 import 'package:novanas/services/controllers/client_controller.dart';
 
 import '../services/auth_service.dart';
@@ -26,7 +29,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         await summaryController.getSummaryReport();
         await clientController.getClientList();
         await LocationService().getCurrentPosition();
-        Get.off(() => const MainScreen());
+        Get.off(() => const MainScreen(), transition: Transition.cupertino);
       } else {
         Get.off(() => LoginScreen());
       }
@@ -38,12 +41,27 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-      child: Image.asset(
-        'assets/images/company_logo.png',
-        width: 200,
-        height: 200,
+      backgroundColor: AppColors.backgroundColor,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Spacer(),
+          Center(
+            child: Image.asset(
+              'assets/images/app_logo.jpg',
+              width: 200,
+              height: 200,
+            ),
+          ),
+          const Spacer(),
+          LoadingAnimationWidget.fallingDot(
+            color: AppColors.acccentColor,
+            size: 50,
+          ),
+          kHeight30,
+          kHeight30,
+        ],
       ),
-    ));
+    );
   }
 }

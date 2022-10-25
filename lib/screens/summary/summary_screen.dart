@@ -4,9 +4,11 @@ import 'package:novanas/models/checkout_summary.dart';
 import 'package:novanas/screens/core/dimensions.dart';
 import 'package:novanas/services/controllers/summary_conrtoller.dart';
 import '../core/constants.dart';
+import '../core/widget/empty_tile.dart';
 import '../core/widget/tile_checkout_summary.dart';
 import '../core/widget/title_page.dart';
 
+// ignore: must_be_immutable
 class SummaryScreen extends StatelessWidget {
   SummaryScreen({Key? key}) : super(key: key);
   SummaryController summaryController = Get.find();
@@ -26,17 +28,25 @@ class SummaryScreen extends StatelessWidget {
                 title: 'Summary',
               ),
               ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    return TileClientCheckOutSummary(
-                      checkOutClientSummary: checkOutsummaryReportList[index],
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return kHeight10;
-                  },
-                  itemCount: checkOutsummaryReportList.length)
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  return checkOutsummaryReportList.isEmpty
+                      ? const EmptyTile(
+                          text: 'Summary',
+                        )
+                      : TileClientCheckOutSummary(
+                          checkOutClientSummary:
+                              checkOutsummaryReportList[index],
+                        );
+                },
+                separatorBuilder: (context, index) {
+                  return kHeight10;
+                },
+                itemCount: checkOutsummaryReportList.isEmpty
+                    ? 1
+                    : checkOutsummaryReportList.length,
+              )
             ],
           ),
         ),

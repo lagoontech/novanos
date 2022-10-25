@@ -11,6 +11,7 @@ import 'package:novanas/services/date_service.dart';
 import '../../core/colors.dart';
 import '../../core/widget/visit_data_field.dart';
 
+// ignore: must_be_immutable
 class VisitClient extends StatelessWidget {
   final NextVisit client;
   VisitClient({Key? key, required this.client}) : super(key: key);
@@ -35,26 +36,34 @@ class VisitClient extends StatelessWidget {
             children: [
               const TitlePage(title: 'Visit Client'),
               VisitDataField(
-                  title: 'Customer Name',
-                  value: client.customerName ?? "Not avaiable"),
+                title: 'Customer Name',
+                value: client.customerName ?? "Not avaiable",
+              ),
               kHeight20,
               VisitDataField(
-                  title: 'Contact Person',
-                  value: client.contactPerson ?? "Not avaiable"),
+                title: 'Contact Person',
+                value: client.contactPerson ?? "Not avaiable",
+              ),
               kHeight20,
               VisitDataField(
-                  title: 'Designation',
-                  value: client.designation ?? "Not avaiable"),
+                title: 'Designation',
+                value: client.designation ?? "Not avaiable",
+              ),
               kHeight20,
               VisitDataField(
-                  title: 'Location', value: client.location ?? "Not avaiable"),
+                title: 'Location',
+                value: client.location ?? "Not avaiable",
+              ),
               kHeight20,
               VisitDataField(
-                  title: 'Product', value: client.product ?? "Not avaiable"),
+                title: 'Product',
+                value: client.product ?? "Not avaiable",
+              ),
               kHeight20,
               VisitDataField(
-                  title: 'Lead Source',
-                  value: client.leadSource ?? "Not avaiable"),
+                title: 'Lead Source',
+                value: client.leadSource ?? "Not avaiable",
+              ),
               kHeight20,
               VisitDataField(
                   title: 'Esitmated Date of visit',

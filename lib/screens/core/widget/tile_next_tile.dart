@@ -1,8 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:novanas/screens/core/constants.dart';
-import 'package:novanas/screens/core/widget/subtitle_text.dart';
-
 import '../colors.dart';
 import '../dimensions.dart';
 
@@ -11,14 +8,14 @@ class NextClient extends StatelessWidget {
     Key? key,
     required this.name,
     required this.address,
-    required this.Status,
+    required this.status,
     required this.checkTime,
     required this.checkDay,
   }) : super(key: key);
 
   final String name;
   final String address;
-  final String Status;
+  final String status;
   final String checkTime;
   final String checkDay;
 

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:novanas/models/client.dart';
-import 'package:novanas/models/next_visit.dart';
 import 'package:novanas/screens/core/constants.dart';
 import 'package:novanas/screens/core/dimensions.dart';
 import 'package:novanas/screens/core/widget/title_page.dart';
@@ -14,6 +13,7 @@ import '../../models/product.dart';
 import '../core/colors.dart';
 import '../core/widget/visit_data_field.dart';
 
+// ignore: must_be_immutable
 class ScheduleVisitClient extends StatefulWidget {
   final Client client;
   ScheduleVisitClient({Key? key, required this.client}) : super(key: key);
@@ -52,14 +52,13 @@ class _ScheduleVisitClientState extends State<ScheduleVisitClient> {
           "EstimatedDateofVisit": estimatedDateValue.toString(),
           "ActualDateofVisit": estimatedDateValue.toString(),
         };
-        print(dataBody);
+
         await clientController.scheduleClient(dataBody);
       }
     }
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    TimeOfDay selectedTime = TimeOfDay.now();
     final DateTime? d = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -94,15 +93,15 @@ class _ScheduleVisitClientState extends State<ScheduleVisitClient> {
     List<String> allProductNameList = [];
     List<LeadSource>? allLeadsourceList = clientController.leadsourceList;
     List<String> allLeadSourceNameList = [];
-    allproductList.forEach((element) {
+    for (var element in allproductList) {
       String name = element.name ?? '';
       allProductNameList.add(name);
-    });
+    }
 
-    allLeadsourceList.forEach((element) {
+    for (var element in allLeadsourceList) {
       String name = element.name ?? '';
       allLeadSourceNameList.add(name);
-    });
+    }
     return Scaffold(
       appBar: AppBar(
         foregroundColor: AppColors.acccentColor,
@@ -201,7 +200,6 @@ class _ScheduleVisitClientState extends State<ScheduleVisitClient> {
                       onChanged: (String? newValue) {
                         setState(() {
                           widget.selectedLeadSource = newValue!;
-                          print(widget.selectedLeadSource);
                         });
                       },
                       items: allLeadSourceNameList.map((String? value) {

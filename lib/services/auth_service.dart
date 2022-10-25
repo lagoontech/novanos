@@ -34,7 +34,6 @@ class AuthService {
     sharedPreferences.setString("geofenceLat", geofenceLat);
     sharedPreferences.setString("geofenceLong", geofenceLong);
     sharedPreferences.setString("dimeter", dimeter);
-    sharedPreferences.commit();
   }
 
   void saveUser(User user) async {
@@ -55,6 +54,7 @@ class AuthService {
       user = userFromJson(userString);
       return user;
     }
+    return null;
   }
 
   saveAuthentication(bool isAuthenticate) async {

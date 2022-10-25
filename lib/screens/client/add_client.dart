@@ -10,6 +10,7 @@ import 'package:novanas/screens/core/widget/title_page.dart';
 import 'package:novanas/services/controllers/client_controller.dart';
 import '../core/colors.dart';
 
+// ignore: must_be_immutable
 class AddClient extends StatefulWidget {
   AddClient({Key? key}) : super(key: key);
 
@@ -35,7 +36,6 @@ class _AddClientState extends State<AddClient> {
       if (widget.selectedProduct == null || widget.selectedLeadSource == null) {
         Get.snackbar('Select Fields', 'From the List');
       } else {
-        print(widget.selectedLeadSource.toString());
         Map<String, dynamic> dataBody = {
           "CustomerName": nameController.text,
           "ContactPerson": contactPersonController.text,
@@ -46,14 +46,13 @@ class _AddClientState extends State<AddClient> {
           "ActualDateofVisit": estimatedDateValue.toString(),
           "LeadSource": widget.selectedLeadSource.toString(),
         };
-        print(dataBody);
+
         await clientController.insertClient(dataBody);
       }
     }
   }
 
   Future<void> _selectDate(BuildContext context) async {
-    TimeOfDay selectedTime = TimeOfDay.now();
     final DateTime? d = await showDatePicker(
       //we wait for the dialog to return
       context: context,
@@ -92,20 +91,21 @@ class _AddClientState extends State<AddClient> {
     List<String> allProductNameList = [];
     List<LeadSource>? allLeadsourceList = clientController.leadsourceList;
     List<String> allLeadSourceNameList = [];
-    allproductList.forEach((element) {
+    for (var element in allproductList) {
       String name = element.name ?? '';
       allProductNameList.add(name);
-    });
+    }
 
-    allLeadsourceList.forEach((element) {
+    for (var element in allLeadsourceList) {
       String name = element.name ?? '';
       allLeadSourceNameList.add(name);
-    });
+    }
 
     return Scaffold(
       appBar: AppBar(
         foregroundColor: AppColors.acccentColor,
         backgroundColor: AppColors.backgroundColor,
+        toolbarHeight: Dimensions.height50,
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: Dimensions.width20),

@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:novanas/models/summary_report.dart';
+import 'package:novanas/screens/admin/pages/widgets/summary_report_details.dart';
 import 'package:novanas/screens/core/constants.dart';
 import '../colors.dart';
 import '../dimensions.dart';
@@ -7,18 +10,10 @@ import '../dimensions.dart';
 class TileClientSummary extends StatelessWidget {
   const TileClientSummary({
     Key? key,
-    required this.name,
-    required this.address,
-    required this.checkIn,
-    required this.checkOut,
-    required this.checkDay,
+    required this.summaryReport,
   }) : super(key: key);
 
-  final String name;
-  final String address;
-  final String checkIn;
-  final String checkOut;
-  final String checkDay;
+  final SummaryReport summaryReport;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +33,7 @@ class TileClientSummary extends StatelessWidget {
                   SizedBox(
                     width: Dimensions.width160,
                     child: Text(
-                      name,
+                      summaryReport.name ?? "Not Available",
                       style: TextStyle(
                           fontSize: Dimensions.fontSize20,
                           fontWeight: FontWeight.w500,
@@ -49,7 +44,7 @@ class TileClientSummary extends StatelessWidget {
                   SizedBox(
                     width: Dimensions.width160,
                     child: Text(
-                      address,
+                      summaryReport.lastLocation ?? "Not Available",
                       maxLines: 2,
                       style: TextStyle(
                           fontSize: Dimensions.fontSize12,
@@ -62,7 +57,11 @@ class TileClientSummary extends StatelessWidget {
               ),
               const Spacer(),
               IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(() => SummaryReportDetails(
+                          summaryReport: summaryReport,
+                        ));
+                  },
                   icon: Icon(
                     CupertinoIcons.arrow_right,
                     color: AppColors.backgroundColor,
@@ -96,7 +95,7 @@ class TileClientSummary extends StatelessWidget {
                   SizedBox(
                     width: Dimensions.width90,
                     child: Text(
-                      checkIn,
+                      summaryReport.checkin ?? "Not Available",
                       maxLines: 3,
                       style: TextStyle(
                           overflow: TextOverflow.ellipsis,
@@ -124,7 +123,9 @@ class TileClientSummary extends StatelessWidget {
                   SizedBox(
                     width: Dimensions.width90,
                     child: Text(
-                      checkOut == '' ? 'NA' : checkOut,
+                      summaryReport.checckOut == ''
+                          ? 'NA'
+                          : summaryReport.checckOut!,
                       maxLines: 3,
                       style: TextStyle(
                           overflow: TextOverflow.ellipsis,

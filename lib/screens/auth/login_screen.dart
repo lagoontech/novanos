@@ -9,6 +9,7 @@ import 'package:novanas/services/controllers/login_controller.dart';
 
 import '../core/widget/title_page.dart';
 
+// ignore: must_be_immutable
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
 
@@ -31,7 +32,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     createOpenBox();
   }

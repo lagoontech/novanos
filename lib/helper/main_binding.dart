@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:novanas/services/controllers/admin_controller.dart';
 import 'package:novanas/services/controllers/client_controller.dart';
 import 'package:novanas/services/controllers/summary_conrtoller.dart';
 
@@ -12,5 +13,6 @@ class MainBinding implements Bindings {
     Get.put<ClientController>(ClientController());
     Get.put<SummaryController>(SummaryController());
     Get.put<DashBoardController>(DashBoardController());
+    Get.put<AdminController>(AdminController());
   }
 }

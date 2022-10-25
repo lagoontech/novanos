@@ -4,12 +4,11 @@ import 'package:get/get.dart';
 import 'package:novanas/models/client.dart';
 import 'package:novanas/screens/client/schedule_visit.dart';
 import 'package:novanas/screens/core/constants.dart';
-import '../../../services/controllers/client_controller.dart';
 import '../colors.dart';
 import '../dimensions.dart';
 
 class TileClientVisit extends StatelessWidget {
-  TileClientVisit({
+  const TileClientVisit({
     Key? key,
     required this.client,
   }) : super(key: key);

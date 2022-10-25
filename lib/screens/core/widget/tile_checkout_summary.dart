@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:novanas/screens/core/constants.dart';
-import 'package:novanas/screens/core/widget/subtitle_text.dart';
 import 'package:novanas/services/date_service.dart';
-
 import '../../../models/checkout_summary.dart';
 import '../colors.dart';
 import '../dimensions.dart';
@@ -19,12 +16,18 @@ class TileClientCheckOutSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(
-          vertical: Dimensions.height10, horizontal: Dimensions.width10),
+        vertical: Dimensions.height10,
+        horizontal: Dimensions.width10,
+      ),
       decoration: BoxDecoration(
-          color: AppColors.secondaryColor,
-          borderRadius: BorderRadius.circular(Dimensions.radius10 / 2)),
+        color: AppColors.secondaryColor,
+        borderRadius: BorderRadius.circular(
+          Dimensions.radius10 / 2,
+        ),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(children: [
             SizedBox(
@@ -38,14 +41,14 @@ class TileClientCheckOutSummary extends StatelessWidget {
                     color: AppColors.backgroundColor),
               ),
             ),
-            Icon(
-              CupertinoIcons.calendar,
-              color: AppColors.backgroundColor,
-              size: Dimensions.fontSize28,
-            ),
-            kWidth10,
             Row(
               children: [
+                Icon(
+                  CupertinoIcons.calendar,
+                  color: AppColors.backgroundColor,
+                  size: Dimensions.fontSize28,
+                ),
+                kWidth10,
                 SizedBox(
                   child: Text(
                     'IN',
@@ -62,49 +65,20 @@ class TileClientCheckOutSummary extends StatelessWidget {
                   width: Dimensions.width90,
                   child: Text(
                     DateService.getFormatedhypenDate(
-                            checkOutClientSummary.actualDateofVisit!) ??
+                          checkOutClientSummary.actualDateofVisit!,
+                        ) ??
                         'Not available',
                     maxLines: 3,
                     style: TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        fontSize: Dimensions.fontSize12,
-                        fontWeight: FontWeight.w700,
-                        color: AppColors.backgroundColor),
+                      overflow: TextOverflow.ellipsis,
+                      fontSize: Dimensions.fontSize12,
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.backgroundColor,
+                    ),
                   ),
                 ),
               ],
             ),
-
-            kHeight10,
-            //   Row(
-            //     children: [
-            //       SizedBox(
-            //         child: Text(
-            //           'OUT ',
-            //           maxLines: 3,
-            //           style: TextStyle(
-            //               overflow: TextOverflow.ellipsis,
-            //               fontSize: Dimensions.fontSize16,
-            //               fontWeight: FontWeight.w700,
-            //               color: AppColors.backgroundColor),
-            //         ),
-            //       ),
-            //       kWidth10,
-            //       SizedBox(
-            //         width: Dimensions.width90,
-            //         child: Text(
-            //           checkOut == '' ? 'NA' : checkOut,
-            //           maxLines: 3,
-            //           style: TextStyle(
-            //               overflow: TextOverflow.ellipsis,
-            //               fontSize: Dimensions.fontSize12,
-            //               fontWeight: FontWeight.w700,
-            //               color: AppColors.backgroundColor),
-            //         ),
-            //       ),
-            //     ],
-            //   ),
-            // ],
           ]),
           SizedBox(
             width: Dimensions.width160,
@@ -112,10 +86,11 @@ class TileClientCheckOutSummary extends StatelessWidget {
               checkOutClientSummary.checkTimeLocation ?? 'Not available',
               maxLines: 2,
               style: TextStyle(
-                  fontSize: Dimensions.fontSize12,
-                  fontWeight: FontWeight.w300,
-                  overflow: TextOverflow.ellipsis,
-                  color: AppColors.backgroundColor),
+                fontSize: Dimensions.fontSize12,
+                fontWeight: FontWeight.w300,
+                overflow: TextOverflow.ellipsis,
+                color: AppColors.backgroundColor,
+              ),
             ),
           ),
         ],

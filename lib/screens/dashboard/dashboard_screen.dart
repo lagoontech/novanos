@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:novanas/models/next_visit.dart';
 import 'package:novanas/screens/core/constants.dart';
 import 'package:novanas/screens/core/dimensions.dart';
+import 'package:novanas/screens/core/widget/empty_tile.dart';
 import 'package:novanas/screens/core/widget/subtitle_text.dart';
 import 'package:novanas/screens/dashboard/pages/check_out_client.dart';
+import 'package:novanas/screens/dashboard/widgets/more_pending_clients.dart';
 import 'package:novanas/services/controllers/dashboard_controller.dart';
 import '../../models/checkin.dart';
 import '../core/colors.dart';
@@ -12,6 +14,7 @@ import '../core/widget/tile_check_in_out.dart';
 import '../core/widget/title_page.dart';
 import 'pages/visit_client.dart';
 
+// ignore: must_be_immutable
 class DashboardScreen extends StatelessWidget {
   DashboardScreen({Key? key}) : super(key: key);
 
@@ -31,6 +34,8 @@ class DashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     List<NextVisit> nextVisitList = dashBoardController.nextClientsList;
     List<CheckIn> checkInClientsList = dashBoardController.checkInClientsList;
+
+    int pendingLength = nextVisitList.length >= 5 ? 5 : nextVisitList.length;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -58,21 +63,27 @@ class DashboardScreen extends StatelessWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      return TileCheckInOut(
-                        name: checkInClientsList[index].customerName ??
-                            'Not Available',
-                        address: checkInClientsList[index].location ??
-                            'Not Available',
-                        status: 'CHECK-OUT',
-                        checkFunc: () {
-                          checkOut(checkInClientsList[index]);
-                        },
-                      );
+                      return checkInClientsList.isEmpty
+                          ? const EmptyTile(
+                              text: 'Check IN',
+                            )
+                          : TileCheckInOut(
+                              name: checkInClientsList[index].customerName ??
+                                  'Not Available',
+                              address: checkInClientsList[index].location ??
+                                  'Not Available',
+                              status: 'CHECK-OUT',
+                              checkFunc: () {
+                                checkOut(checkInClientsList[index]);
+                              },
+                            );
                     },
                     separatorBuilder: (context, index) {
                       return kHeight10;
                     },
-                    itemCount: checkInClientsList.length,
+                    itemCount: checkInClientsList.isEmpty
+                        ? 1
+                        : checkInClientsList.length,
                   )
                 ],
               ),
@@ -93,7 +104,11 @@ class DashboardScreen extends StatelessWidget {
                             color: AppColors.acccentColor),
                       ),
                       TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.to(() => MorePendingClients(
+                                  pendingClientsList: nextVisitList,
+                                ));
+                          },
                           child: Row(
                             children: [
                               Icon(
@@ -101,7 +116,7 @@ class DashboardScreen extends StatelessWidget {
                                 color: AppColors.acccentColor,
                               ),
                               kWidth10,
-                              SubTitleText(
+                              const SubTitleText(
                                 subTitle: 'More',
                               ),
                             ],
@@ -113,22 +128,26 @@ class DashboardScreen extends StatelessWidget {
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     itemBuilder: (context, index) {
-                      return TileCheckInOut(
-                        name: nextVisitList[index].customerName ??
-                            'Not Available',
-                        address:
-                            nextVisitList[index].location ?? 'Not Available',
-                        status: 'VISIT',
-                        checkFunc: () {
-                          checkIn(nextVisitList[index]);
-                          // checkOut();
-                        },
-                      );
+                      return nextVisitList.isEmpty
+                          ? const EmptyTile(
+                              text: 'Pending',
+                            )
+                          : TileCheckInOut(
+                              name: nextVisitList[index].customerName ??
+                                  'Not Available',
+                              address: nextVisitList[index].location ??
+                                  'Not Available',
+                              status: 'VISIT',
+                              checkFunc: () {
+                                checkIn(nextVisitList[index]);
+                                // checkOut();
+                              },
+                            );
                     },
                     separatorBuilder: (context, index) {
                       return kHeight10;
                     },
-                    itemCount: nextVisitList.length,
+                    itemCount: pendingLength == 0 ? 1 : pendingLength,
                   )
                 ],
               )

@@ -1,18 +1,14 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as Http;
+import 'package:http/http.dart' as http;
 import 'package:novanas/helper/constant.dart';
 import 'package:novanas/models/client.dart';
 import 'package:novanas/models/leadsource.dart';
 import 'package:novanas/models/next_visit.dart';
 import 'package:novanas/models/product.dart';
 import 'package:novanas/screens/loading_screen.dart';
-import 'package:novanas/screens/main_screen.dart';
 import 'package:novanas/services/controllers/dashboard_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../helper/connectivity_manager.dart';
 import '../../models/checkin.dart';
 import '../api_urls.dart';
@@ -33,8 +29,8 @@ class ClientController extends GetxController {
   Future<void> insertClient(Map<String, dynamic> dataBody) async {
     if (await ConnectivityManager.connected()) {
       try {
-        String url = URL.INSERT_CLIENT;
-        var response = await Http.post(
+        String url = URL.insertClientURL;
+        var response = await http.post(
           Uri.parse(url),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -49,13 +45,7 @@ class ClientController extends GetxController {
           DashBoardController dashBoardController = Get.find();
           await dashBoardController.getCheckInClients();
           await dashBoardController.getNextClient();
-          Get.off(() => LoadingScreen());
-          print('woirkung');
-
-          Get.snackbar(
-            'Successfully ',
-            "added Client",
-          );
+          Get.off(() => const LoadingScreen());
         }
       } catch (e) {
         Get.snackbar(
@@ -77,16 +67,16 @@ class ClientController extends GetxController {
     String employeeNo = sharedPreferences.getString('username')!;
     Map<String, dynamic> params = {'EmployeeNo': employeeNo};
 
-    String url = '${URL.PRODUCTS}${Uri(queryParameters: params).query}';
+    String url = '${URL.productURL}${Uri(queryParameters: params).query}';
 
-    Http.Response _response =
-        await Http.get(Uri.parse(url), headers: <String, String>{
+    http.Response response =
+        await http.get(Uri.parse(url), headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     });
 
-    if (_response.statusCode == 200) {
+    if (response.statusCode == 200) {
       productList = [];
-      productList = productFromJson(_response.body);
+      productList = productFromJson(response.body);
 
       return productList;
     } else {
@@ -100,16 +90,17 @@ class ClientController extends GetxController {
     String employeeNo = sharedPreferences.getString('username')!;
     Map<String, dynamic> params = {'EmployeeNo': employeeNo};
 
-    String url = '${URL.LEAD_SOURCE_LIST}${Uri(queryParameters: params).query}';
+    String url =
+        '${URL.leadSourceListURL}${Uri(queryParameters: params).query}';
 
-    Http.Response _response =
-        await Http.get(Uri.parse(url), headers: <String, String>{
+    http.Response response =
+        await http.get(Uri.parse(url), headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     });
 
-    if (_response.statusCode == 200) {
+    if (response.statusCode == 200) {
       leadsourceList = [];
-      leadsourceList = leadSourceFromJson(_response.body);
+      leadsourceList = leadSourceFromJson(response.body);
 
       return leadsourceList;
     } else {
@@ -125,16 +116,16 @@ class ClientController extends GetxController {
 
     Map<String, dynamic> params = {'EmployeeNo': employeeNo};
 
-    String url = '${URL.CLIENT_LIST}${Uri(queryParameters: params).query}';
+    String url = '${URL.clientListURL}${Uri(queryParameters: params).query}';
 
-    Http.Response _response =
-        await Http.get(Uri.parse(url), headers: <String, String>{
+    http.Response response =
+        await http.get(Uri.parse(url), headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     });
 
-    if (_response.statusCode == 200) {
+    if (response.statusCode == 200) {
       clientList = [];
-      clientList = clientFromJson(_response.body);
+      clientList = clientFromJson(response.body);
 
       return clientList;
     } else {
@@ -172,8 +163,8 @@ class ClientController extends GetxController {
 
     if (await ConnectivityManager.connected()) {
       try {
-        String url = URL.CHECK_IN;
-        var response = await Http.post(
+        String url = URL.checkInURL;
+        var response = await http.post(
           Uri.parse(url),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -189,11 +180,7 @@ class ClientController extends GetxController {
           DashBoardController dashBoardController = Get.find();
           await dashBoardController.getCheckInClients();
           await dashBoardController.getNextClient();
-          Get.off(() => const MainScreen());
-          Get.snackbar(
-            'Successfuly',
-            "CheckIN",
-          );
+          Get.off(() => const LoadingScreen());
         }
       } catch (e) {
         Get.snackbar(
@@ -222,7 +209,7 @@ class ClientController extends GetxController {
     Map<String, dynamic> dataBody = {
       "Latitude": Constants.currentPosition!.latitude,
       "Longitude": Constants.currentPosition!.longitude,
-      "CheckType": "1",
+      "CheckType": "OUT",
       "CheckTime": DateTime.now().toString(),
       "ClientName": checkInClient.customerName,
       "ContactPerson": checkInClient.contactPerson.toString(),
@@ -234,13 +221,14 @@ class ClientController extends GetxController {
       "Comment": checkComment,
       "TransactionId": checkInClient.transactionId.toString(),
       "LeadSource": checkInClient.leadSource.toString(),
-      "ClientId": checkInClient.clientId.toString()
+      "ClientId": checkInClient.clientId.toString(),
+      "Employee": employeeNo.toString(),
     };
 
     if (await ConnectivityManager.connected()) {
       try {
-        String url = URL.CHECK_OUT;
-        var response = await Http.post(
+        String url = URL.checkOutURL;
+        var response = await http.post(
           Uri.parse(url),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -258,11 +246,7 @@ class ClientController extends GetxController {
           await dashBoardController.getNextClient();
           SummaryController summaryController = Get.find();
           summaryController.getCheckOutSummary();
-          Get.off(() => const MainScreen());
-          Get.snackbar(
-            'Successfuly',
-            "CheckOUT",
-          );
+          Get.off(() => const LoadingScreen());
         }
       } catch (e) {
         Get.snackbar(
@@ -281,8 +265,8 @@ class ClientController extends GetxController {
   Future<void> scheduleClient(Map<String, dynamic> dataBody) async {
     if (await ConnectivityManager.connected()) {
       try {
-        String url = URL.SCHEDULE_CLIENT;
-        var response = await Http.post(
+        String url = URL.scheduleClientURL;
+        var response = await http.post(
           Uri.parse(url),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
@@ -297,12 +281,7 @@ class ClientController extends GetxController {
           DashBoardController dashBoardController = Get.find();
           await dashBoardController.getCheckInClients();
           await dashBoardController.getNextClient();
-          Get.off(() => const MainScreen());
-
-          Get.snackbar(
-            'Successfully ',
-            "added Client",
-          );
+          Get.off(() => const LoadingScreen());
         }
       } catch (e) {
         Get.snackbar(

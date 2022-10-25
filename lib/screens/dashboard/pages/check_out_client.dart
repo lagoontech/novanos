@@ -1,18 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:novanas/models/next_visit.dart';
 import 'package:novanas/screens/core/colors.dart';
 import 'package:novanas/screens/core/widget/title_page.dart';
 import 'package:novanas/services/controllers/client_controller.dart';
 import 'package:novanas/services/controllers/login_controller.dart';
-import 'package:novanas/services/date_service.dart';
-
 import '../../../models/checkin.dart';
 import '../../core/constants.dart';
 import '../../core/dimensions.dart';
 import '../../core/widget/visit_data_field.dart';
 
+// ignore: must_be_immutable
 class CheckOutClient extends StatelessWidget {
   final CheckIn checkOutClient;
   CheckOutClient({Key? key, required this.checkOutClient}) : super(key: key);

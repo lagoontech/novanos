@@ -4,7 +4,7 @@ import '../colors.dart';
 import '../dimensions.dart';
 
 class TextTitle extends StatelessWidget {
-  TextTitle({
+  const TextTitle({
     Key? key,
     required this.title,
   }) : super(key: key);

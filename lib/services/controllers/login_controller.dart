@@ -41,7 +41,7 @@ class LoginController extends GetxController {
 
     if (await ConnectivityManager.connected()) {
       try {
-        String url_ = "${URL.LOGIN}${Uri(queryParameters: params).query}";
+        String url_ = "${URL.loginURL}${Uri(queryParameters: params).query}";
 
         final response = await http.get(
           Uri.parse(url_),
@@ -90,7 +90,7 @@ class LoginController extends GetxController {
 
     Map<String, dynamic> params = {'EmployeeNo': employeeNo};
 
-    String url = '${URL.PROFILE}${Uri(queryParameters: params).query}';
+    String url = '${URL.profileURL}${Uri(queryParameters: params).query}';
 
     final response = await http.get(Uri.parse(url), headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',

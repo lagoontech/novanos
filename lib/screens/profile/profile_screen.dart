@@ -13,6 +13,7 @@ import '../core/widget/profile_data_field.dart';
 import '../core/widget/title_page.dart';
 import '../core/widget/title_text.dart';
 
+// ignore: must_be_immutable
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({Key? key}) : super(key: key);
 

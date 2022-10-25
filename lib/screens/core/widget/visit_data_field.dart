@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:novanas/screens/core/colors.dart';
-import 'package:novanas/screens/core/constants.dart';
-
 import '../dimensions.dart';
 import 'subtitle_text.dart';
 
