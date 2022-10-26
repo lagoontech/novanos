@@ -153,9 +153,8 @@ class AdminController extends GetxController {
             response.statusCode == 201 ||
             response.statusCode == 202) {
           await getScheduleRequests();
-          Get.off(AdminScheduleRequests(),
-              transition: Transition.noTransition,
-              duration: const Duration(milliseconds: 1));
+
+          Get.back();
         }
       } catch (e) {
         Get.snackbar(
