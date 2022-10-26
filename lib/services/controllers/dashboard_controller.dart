@@ -27,7 +27,7 @@ class DashBoardController extends GetxController {
 
 // Find the last day of the month.
     var beginningPastMonth = (now.month < 12)
-        ? DateTime(now.year, now.month - 1, 1)
+        ? DateTime(now.year, now.month, 1)
         : DateTime(now.year - 1, 1, 1);
 
     int lastday = DateTime(now.year, now.month + 1, 0).day;
@@ -66,7 +66,7 @@ class DashBoardController extends GetxController {
     var now = DateTime.now();
 
     var beginningPastMonth = (now.month < 12)
-        ? DateTime(now.year, now.month - 1, 1)
+        ? DateTime(now.year, now.month, 1)
         : DateTime(now.year - 1, 1, 1);
 
     int lastday = DateTime(now.year, now.month + 1, 0).day;

@@ -27,7 +27,7 @@ class SummaryController extends GetxController {
 
 // Find the last day of the month.
     var beginningPastMonth = (now.month < 12)
-        ? DateTime(now.year, now.month - 1, 1)
+        ? DateTime(now.year, now.month, 1)
         : DateTime(now.year - 1, 1, 1);
 
     Map<String, dynamic> params = {
@@ -43,6 +43,8 @@ class SummaryController extends GetxController {
         await http.get(Uri.parse(url), headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     });
+
+    print(response.statusCode);
 
     if (response.statusCode == 200) {
       summaryReportList = [];
@@ -64,7 +66,7 @@ class SummaryController extends GetxController {
 
 // Find the last day of the month.
     var beginningPastMonth = (now.month < 12)
-        ? DateTime(now.year, now.month - 1, 1)
+        ? DateTime(now.year, now.month, 1)
         : DateTime(now.year - 1, 1, 1);
 
     Map<String, dynamic> params = {

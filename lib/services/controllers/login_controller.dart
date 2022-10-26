@@ -11,6 +11,7 @@ import '../api_urls.dart';
 import 'package:http/http.dart' as http;
 
 import '../auth_service.dart';
+import '../location_services.dart';
 
 class LoginController extends GetxController {
   List<Profile> profileDetails = [];
@@ -31,6 +32,7 @@ class LoginController extends GetxController {
       {required String userName,
       required String passWord,
       BuildContext? context}) async {
+    await LocationService().getCurrentPosition();
     Map<String, String> params = {
       'UserName': userName,
       'password': passWord,
@@ -109,6 +111,7 @@ class LoginController extends GetxController {
     final LocalAuthentication auth = LocalAuthentication();
 
     try {
+      await LocationService().getCurrentPosition();
       isAuthenticating.value = true;
       _authorized.value = 'Authenticating';
 

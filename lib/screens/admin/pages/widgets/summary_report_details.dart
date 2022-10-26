@@ -59,6 +59,11 @@ class SummaryReportDetails extends StatelessWidget {
             ),
             kHeight20,
             NormalTitleValueField(
+              title: 'CHECKIN COMMENT',
+              value: summaryReport.inComment ?? "NA",
+            ),
+            kHeight20,
+            NormalTitleValueField(
               title: 'CHECKOUT LOCATION',
               value: summaryReport.lastLocation ?? "NA",
             ),
@@ -66,6 +71,11 @@ class SummaryReportDetails extends StatelessWidget {
             NormalTitleValueField(
               title: 'CHECKOUT TIME',
               value: summaryReport.checckOut ?? "NA",
+            ),
+            kHeight20,
+            NormalTitleValueField(
+              title: 'CHECKOUT COMMENT',
+              value: summaryReport.outComment ?? "NA",
             ),
           ],
         ),

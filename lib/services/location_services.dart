@@ -52,8 +52,8 @@ class LocationService {
         .then((List<Placemark> placemarks) {
       Placemark place = placemarks[0];
 
-      Constants.currentAddress = '${place.subLocality},'
-          '${place.subAdministrativeArea}';
+      Constants.currentAddress =
+          '${place.name},${place.street},${place.subLocality},${place.subAdministrativeArea}';
     }).catchError((e) {
       debugPrint(e);
     });

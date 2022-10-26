@@ -6,7 +6,6 @@ import 'package:novanas/screens/core/widget/title_page.dart';
 import 'package:novanas/services/admin_services.dart';
 import '../core/widget/admin_feature_tile.dart';
 import 'pages/admin_summary_report.dart';
-import 'pages/schedule_requests.dart';
 
 class AdminScreen extends StatelessWidget {
   const AdminScreen({Key? key}) : super(key: key);
@@ -31,12 +30,12 @@ class AdminScreen extends StatelessWidget {
               AdminTile(
                 featureTitleText: 'Schedule request',
                 icon: Icons.schedule_send_outlined,
-                function: () => Get.to(() => const AdminScheduleRequests()),
+                function: () => AdminService().scheduleRequestFunction(),
               ),
               AdminTile(
                 featureTitleText: 'Summary report',
                 icon: Icons.history,
-                function: () => Get.to(() => AdminSummaryReport()),
+                function: () => Get.to(() => const AdminSummaryReport()),
               ),
               kHeight20,
             ],

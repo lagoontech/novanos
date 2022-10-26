@@ -218,7 +218,7 @@ class ClientController extends GetxController {
       "CheckTimeLocation": Constants.currentAddress,
       "Product": checkInClient.product.toString(),
       "EstimatedDateOfVisit": checkInClient.estimatedDateOfVisit.toString(),
-      "Comment": checkComment,
+      "Comment": checkComment.toString(),
       "TransactionId": checkInClient.transactionId.toString(),
       "LeadSource": checkInClient.leadSource.toString(),
       "ClientId": checkInClient.clientId.toString(),

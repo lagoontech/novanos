@@ -27,4 +27,12 @@ class URL {
 
   // Admin
   static String employeeListURL = '$baseURL/api/Employee/EmployeeList?';
+  static String scheduleRequestURL =
+      '$baseURL/api/CheckInOut/ScheduleRequestReport?';
+
+  static String scheduleRequestApprove =
+      '$baseURL/api/Customer/ScheduleApproveRequestAPI';
+
+  static String scheduleRequestReject =
+      '$baseURL/api/Customer/ScheduleRejectRequestAPI';
 }

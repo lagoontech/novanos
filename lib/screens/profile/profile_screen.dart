@@ -58,8 +58,9 @@ class ProfileScreen extends StatelessWidget {
                     CircleAvatar(
                       backgroundColor: AppColors.acccentColor,
                       backgroundImage: NetworkImage(
+                          scale: 30.0,
                           profile.photo ?? 'assets/images/profile.jpg'),
-                      maxRadius: 50,
+                      maxRadius: 55,
                     ),
                     SizedBox(
                       width: Dimensions.width160,

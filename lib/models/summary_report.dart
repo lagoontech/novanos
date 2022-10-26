@@ -21,6 +21,11 @@ class SummaryReport {
     this.firstLocation,
     this.lastLocation,
     this.workHours,
+    this.clientName,
+    this.leadSource,
+    this.product,
+    this.inComment,
+    this.outComment,
   });
 
   String? name;
@@ -31,6 +36,11 @@ class SummaryReport {
   String? firstLocation;
   String? lastLocation;
   String? workHours;
+  String? clientName;
+  String? leadSource;
+  String? product;
+  String? inComment;
+  String? outComment;
 
   factory SummaryReport.fromJson(Map<String, dynamic> json) => SummaryReport(
         name: json["Name"],
@@ -41,6 +51,11 @@ class SummaryReport {
         firstLocation: json["FirstLocation"],
         lastLocation: json["LastLocation"],
         workHours: json["WorkHours"],
+        clientName: json["ClientName"],
+        leadSource: json["LeadSource"],
+        product: json["Product"],
+        inComment: json["InComment"],
+        outComment: json["OutComment"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -52,5 +67,10 @@ class SummaryReport {
         "FirstLocation": firstLocation,
         "LastLocation": lastLocation,
         "WorkHours": workHours,
+        "ClientName": clientName,
+        "LeadSource": leadSource,
+        "Product": product,
+        "InComment": inComment,
+        "OutComment": outComment,
       };
 }

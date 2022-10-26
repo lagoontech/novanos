@@ -8,6 +8,7 @@ import 'package:novanas/screens/core/constants.dart';
 import 'package:novanas/screens/core/dimensions.dart';
 import 'package:novanas/screens/core/widget/title_page.dart';
 import 'package:novanas/services/controllers/client_controller.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../core/colors.dart';
 
 // ignore: must_be_immutable
@@ -36,6 +37,10 @@ class _AddClientState extends State<AddClient> {
       if (widget.selectedProduct == null || widget.selectedLeadSource == null) {
         Get.snackbar('Select Fields', 'From the List');
       } else {
+        final SharedPreferences sharedPreferences =
+            await SharedPreferences.getInstance();
+
+        String employeeNo = sharedPreferences.getString('username')!;
         Map<String, dynamic> dataBody = {
           "CustomerName": nameController.text,
           "ContactPerson": contactPersonController.text,
@@ -45,6 +50,7 @@ class _AddClientState extends State<AddClient> {
           "EstimatedDateofVisit": estimatedDateValue.toString(),
           "ActualDateofVisit": estimatedDateValue.toString(),
           "LeadSource": widget.selectedLeadSource.toString(),
+          "EmployeeNo": employeeNo,
         };
 
         await clientController.insertClient(dataBody);
