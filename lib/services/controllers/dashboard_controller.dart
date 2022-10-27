@@ -1,8 +1,8 @@
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:novanas/models/checkin.dart';
 import 'package:novanas/models/next_visit.dart';
+import 'package:novanas/services/auth_service.dart';
 import 'package:novanas/services/date_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../api_urls.dart';
@@ -19,9 +19,7 @@ class DashBoardController extends GetxController {
   }
 
   Future<List<NextVisit>?> getNextClient() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-    String employeeNo = sharedPreferences.getString('username')!;
+    String employeeNo = await AuthService().getEmpId();
 
     var now = DateTime.now();
 
@@ -59,9 +57,7 @@ class DashBoardController extends GetxController {
   }
 
   Future<List<CheckIn>?> getCheckInClients() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-    String employeeNo = sharedPreferences.getString('username')!;
+    String employeeNo = await AuthService().getEmpId();
 
     var now = DateTime.now();
 

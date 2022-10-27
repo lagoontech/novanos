@@ -6,7 +6,10 @@ import 'package:novanas/screens/client/client_screen.dart';
 import 'package:novanas/screens/dashboard/dashboard_screen.dart';
 import 'package:novanas/screens/profile/profile_screen.dart';
 import 'package:novanas/screens/summary/summary_screen.dart';
+import 'package:novanas/services/controllers/client_controller.dart';
+import 'package:novanas/services/controllers/dashboard_controller.dart';
 import 'package:novanas/services/controllers/login_controller.dart';
+import 'package:novanas/services/controllers/summary_conrtoller.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
 import '../models/profile.dart';
@@ -23,8 +26,13 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
   @override
   void initState() {
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _refreshIndicatorKey.currentState!.show());
+    setState(() {});
     super.initState();
   }
 
@@ -111,6 +119,16 @@ class _MainScreenState extends State<MainScreen> {
     ];
   }
 
+  refresh() {
+    DashBoardController dashBoardController = Get.find();
+    ClientController clientController = Get.find();
+    SummaryController summaryController = Get.find();
+    clientController.getClientList();
+    summaryController.getSummaryReport();
+    dashBoardController.getCheckInClients();
+    dashBoardController.getNextClient();
+  }
+
   @override
   Widget build(BuildContext context) {
     PersistentTabController controller;
@@ -119,35 +137,41 @@ class _MainScreenState extends State<MainScreen> {
 
     controller = PersistentTabController(initialIndex: widget.screenIndex);
 
-    return PersistentTabView(
-      context,
-      controller: controller,
-      screens: profile.isAdmin == 'Y' ? _adminBuildScreens() : _buildScreens(),
-      items: profile.isAdmin == 'Y' ? _adminNavBarsItems() : _navBarsItems(),
-      confineInSafeArea: true,
-      backgroundColor: Colors.white, // Default is Colors.white.
-      handleAndroidBackButtonPress: true, // Default is true.
-      resizeToAvoidBottomInset: true,
-      stateManagement: true, // Default is true.
-      hideNavigationBarWhenKeyboardShows: true,
-      decoration: NavBarDecoration(
-        borderRadius: BorderRadius.circular(Dimensions.radius10),
-        colorBehindNavBar: Colors.white,
+    return RefreshIndicator(
+      key: _refreshIndicatorKey,
+      color: AppColors.acccentColor,
+      onRefresh: () async {
+        refresh();
+      },
+      child: PersistentTabView(
+        context,
+        controller: controller,
+        screens:
+            profile.isAdmin == 'Y' ? _adminBuildScreens() : _buildScreens(),
+        items: profile.isAdmin == 'Y' ? _adminNavBarsItems() : _navBarsItems(),
+        confineInSafeArea: true,
+        backgroundColor: Colors.white,
+        handleAndroidBackButtonPress: true,
+        resizeToAvoidBottomInset: true,
+        stateManagement: true,
+        hideNavigationBarWhenKeyboardShows: true,
+        decoration: NavBarDecoration(
+          borderRadius: BorderRadius.circular(Dimensions.radius10),
+          colorBehindNavBar: Colors.white,
+        ),
+        popAllScreensOnTapOfSelectedTab: true,
+        popActionScreens: PopActionScreensType.all,
+        itemAnimationProperties: const ItemAnimationProperties(
+          duration: Duration(milliseconds: 200),
+          curve: Curves.ease,
+        ),
+        screenTransitionAnimation: const ScreenTransitionAnimation(
+          animateTabTransition: true,
+          curve: Curves.ease,
+          duration: Duration(milliseconds: 200),
+        ),
+        navBarStyle: NavBarStyle.style11,
       ),
-      popAllScreensOnTapOfSelectedTab: true,
-      popActionScreens: PopActionScreensType.all,
-      itemAnimationProperties: const ItemAnimationProperties(
-        duration: Duration(milliseconds: 200),
-        curve: Curves.ease,
-      ),
-      screenTransitionAnimation: const ScreenTransitionAnimation(
-        // Screen transition animation on change of selected tab.
-        animateTabTransition: true,
-        curve: Curves.ease,
-        duration: Duration(milliseconds: 200),
-      ),
-      navBarStyle:
-          NavBarStyle.style11, // Choose the nav bar style with this property.
     );
   }
 }

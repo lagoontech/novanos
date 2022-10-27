@@ -14,6 +14,13 @@ class AuthService {
     sharedPreferences.setString("password", userPassword);
   }
 
+  Future<String> getEmpId() async {
+    final SharedPreferences sharedPreferences =
+        await SharedPreferences.getInstance();
+    String employeeNo = sharedPreferences.getString('username')!;
+    return employeeNo;
+  }
+
   void savePref(
       {required String id,
       required String name,
@@ -83,7 +90,7 @@ class AuthService {
     sharedPreferences.setString("checkOutTime", checkOutTime);
   }
 
-  void clearSharedPref() async {
+  Future<void> clearSharedPref() async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
     sharedPreferences.clear();

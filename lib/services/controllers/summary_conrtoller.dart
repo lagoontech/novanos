@@ -1,11 +1,11 @@
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:novanas/models/summary_report.dart';
 import 'package:novanas/services/date_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../models/checkout_summary.dart';
 import '../api_urls.dart';
+import '../auth_service.dart';
 
 class SummaryController extends GetxController {
   List<SummaryReport> summaryReportList = [];
@@ -19,19 +19,10 @@ class SummaryController extends GetxController {
   }
 
   Future<List<SummaryReport>?> getSummaryReport() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-    String employeeNo = sharedPreferences.getString('username')!;
-
-    var now = DateTime.now();
-
-// Find the last day of the month.
-    var beginningPastMonth = (now.month < 12)
-        ? DateTime(now.year, now.month, 1)
-        : DateTime(now.year - 1, 1, 1);
+    String employeeNo = await AuthService().getEmpId();
 
     Map<String, dynamic> params = {
-      'FromDate': DateService.getFormatedhypenDate(beginningPastMonth),
+      'FromDate': DateService.getStartDateOfMonthhypenDate(),
       'EndDate': DateService.getFormatedhypenDate(DateTime.now()).toString(),
       'EmployeeNo': employeeNo,
     };
@@ -43,8 +34,6 @@ class SummaryController extends GetxController {
         await http.get(Uri.parse(url), headers: <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
     });
-
-    print(response.statusCode);
 
     if (response.statusCode == 200) {
       summaryReportList = [];
@@ -58,19 +47,10 @@ class SummaryController extends GetxController {
   }
 
   Future<List<CheckOutSummary>?> getCheckOutSummary() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-    String employeeNo = sharedPreferences.getString('username')!;
-
-    var now = DateTime.now();
-
-// Find the last day of the month.
-    var beginningPastMonth = (now.month < 12)
-        ? DateTime(now.year, now.month, 1)
-        : DateTime(now.year - 1, 1, 1);
+    String employeeNo = await AuthService().getEmpId();
 
     Map<String, dynamic> params = {
-      'FromDate': DateService.getFormatedhypenDate(beginningPastMonth),
+      'FromDate': DateService.getStartDateOfMonthhypenDate(),
       'EndDate': DateService.getFormatedhypenDate(DateTime.now()).toString(),
       'EmployeeNo': employeeNo,
     };

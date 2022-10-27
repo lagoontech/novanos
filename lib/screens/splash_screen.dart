@@ -3,36 +3,27 @@ import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:novanas/screens/core/colors.dart';
 import 'package:novanas/screens/core/constants.dart';
-import 'package:novanas/services/controllers/client_controller.dart';
-
+import 'package:novanas/screens/loading_screen.dart';
 import '../services/auth_service.dart';
-import '../services/controllers/summary_conrtoller.dart';
 import '../services/location_services.dart';
 import 'auth/login_screen.dart';
-import 'main_screen.dart';
 
-class LoadingScreen extends StatefulWidget {
-  const LoadingScreen({Key? key}) : super(key: key);
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoadingScreen> createState() => _LoadingScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _LoadingScreenState extends State<LoadingScreen> {
+class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(const Duration(milliseconds: 500), () async {
       var islogin = await AuthService().getAuthentication();
       if (islogin) {
-        ClientController clientController = Get.find();
-        SummaryController summaryController = Get.find();
-        await summaryController.getSummaryReport();
-        await clientController.getClientList();
         await LocationService().getCurrentPosition();
-        Get.off(() => const MainScreen(), transition: Transition.cupertino);
+        Get.off(() => const LoadingScreen(), transition: Transition.cupertino);
       } else {
-        await AuthService().clearSharedPref();
-        await LocationService().getCurrentPosition();
         Get.off(() => LoginScreen());
       }
     });

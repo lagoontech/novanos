@@ -85,10 +85,7 @@ class LoginController extends GetxController {
   }
 
   Future<List<Profile>?> getProfile() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-
-    String employeeNo = sharedPreferences.getString('username')!;
+    String employeeNo = await AuthService().getEmpId();
 
     Map<String, dynamic> params = {'EmployeeNo': employeeNo};
 

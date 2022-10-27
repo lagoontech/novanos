@@ -12,4 +12,13 @@ class DateService {
     var formatDate = formatter.format(date);
     return formatDate;
   }
+
+  static String getStartDateOfMonthhypenDate() {
+    DateTime now = DateTime.now();
+    var beginningPastMonth = (now.month < 12)
+        ? DateTime(now.year, now.month, 1)
+        : DateTime(now.year - 1, 1, 1);
+
+    return getFormatedhypenDate(beginningPastMonth).toString();
+  }
 }

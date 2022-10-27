@@ -2,20 +2,23 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:novanas/models/employee.dart';
 import 'package:novanas/screens/admin/pages/schedule_requests.dart';
+import 'package:novanas/screens/loading_screen.dart';
+import 'package:novanas/services/controllers/dashboard_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../helper/connectivity_manager.dart';
 import '../../models/schedule_request.dart';
 import '../api_urls.dart';
+import '../auth_service.dart';
 import '../date_service.dart';
 
 class AdminController extends GetxController {
   List<Employee> employeeList = [];
   var scheduleRequestList = [].obs;
+
+  DashBoardController dashBoardController = Get.find();
   Future<List<Employee>?> getEmployeeList() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-    String employeeNo = sharedPreferences.getString('username')!;
+    String employeeNo = await AuthService().getEmpId();
 
     Map<String, dynamic> params = {
       'EmployeeNo': employeeNo,
@@ -40,10 +43,7 @@ class AdminController extends GetxController {
   }
 
   Future<RxList?> getScheduleRequests() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-    String employeeNo = sharedPreferences.getString('username')!;
-
+    String employeeNo = await AuthService().getEmpId();
     var now = DateTime.now();
 
 // Find the last day of the month.
@@ -83,10 +83,7 @@ class AdminController extends GetxController {
   Future<void> scheduleRequestApprove({
     required String id,
   }) async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-
-    String employeeNo = sharedPreferences.getString('username')!;
+    String employeeNo = await AuthService().getEmpId();
 
     Map<String, dynamic> dataBody = {
       "ID": "1",
@@ -108,8 +105,9 @@ class AdminController extends GetxController {
             response.statusCode == 201 ||
             response.statusCode == 202) {
           await getScheduleRequests();
+          await dashBoardController.getNextClient();
           print(scheduleRequestList.length);
-          Get.back();
+          Get.off(() => const LoadingScreen());
         }
       } catch (e) {
         Get.snackbar(
@@ -128,10 +126,7 @@ class AdminController extends GetxController {
   Future<void> scheduleRequestReject({
     required String id,
   }) async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-
-    String employeeNo = sharedPreferences.getString('username')!;
+    String employeeNo = await AuthService().getEmpId();
 
     Map<String, dynamic> dataBody = {
       "ID": "1",
@@ -153,8 +148,9 @@ class AdminController extends GetxController {
             response.statusCode == 201 ||
             response.statusCode == 202) {
           await getScheduleRequests();
-
-          Get.back();
+          await dashBoardController.getNextClient();
+          print(scheduleRequestList.length);
+          Get.off(() => const LoadingScreen());
         }
       } catch (e) {
         Get.snackbar(

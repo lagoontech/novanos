@@ -5,6 +5,7 @@ import 'package:novanas/helper/main_binding.dart';
 import 'package:novanas/screens/core/colors.dart';
 import 'package:novanas/screens/loading_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:novanas/screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,12 +21,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Novanas',
+      title: 'Leadoon',
       theme: ThemeData(
-          backgroundColor: AppColors.backgroundColor,
-          focusColor: AppColors.acccentColor,
-          textTheme: GoogleFonts.poppinsTextTheme(),
-          toggleableActiveColor: AppColors.acccentColor),
+        backgroundColor: AppColors.backgroundColor,
+        focusColor: AppColors.acccentColor,
+        textTheme: GoogleFonts.poppinsTextTheme(),
+        toggleableActiveColor: AppColors.acccentColor,
+      ),
       home: const LoadingScreen(),
       initialBinding: MainBinding(),
     );

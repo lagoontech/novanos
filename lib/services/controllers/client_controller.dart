@@ -12,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../helper/connectivity_manager.dart';
 import '../../models/checkin.dart';
 import '../api_urls.dart';
+import '../auth_service.dart';
 import 'summary_conrtoller.dart';
 
 class ClientController extends GetxController {
@@ -62,9 +63,7 @@ class ClientController extends GetxController {
   }
 
   Future<List<Product>?> getProducts() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-    String employeeNo = sharedPreferences.getString('username')!;
+    String employeeNo = await AuthService().getEmpId();
     Map<String, dynamic> params = {'EmployeeNo': employeeNo};
 
     String url = '${URL.productURL}${Uri(queryParameters: params).query}';
@@ -85,9 +84,7 @@ class ClientController extends GetxController {
   }
 
   Future<List<LeadSource>?> getLeadSource() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-    String employeeNo = sharedPreferences.getString('username')!;
+    String employeeNo = await AuthService().getEmpId();
     Map<String, dynamic> params = {'EmployeeNo': employeeNo};
 
     String url =
@@ -109,10 +106,7 @@ class ClientController extends GetxController {
   }
 
   Future<List<Client>?> getClientList() async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-
-    String employeeNo = sharedPreferences.getString('username')!;
+    String employeeNo = await AuthService().getEmpId();
 
     Map<String, dynamic> params = {'EmployeeNo': employeeNo};
 
@@ -138,10 +132,7 @@ class ClientController extends GetxController {
     required String checkComment,
     required NextVisit nextVisit,
   }) async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-
-    String employeeNo = sharedPreferences.getString('username')!;
+    String employeeNo = await AuthService().getEmpId();
 
     Map<String, dynamic> dataBody = {
       "ID": employeeNo,
@@ -201,10 +192,7 @@ class ClientController extends GetxController {
     required String checkComment,
     required CheckIn checkInClient,
   }) async {
-    final SharedPreferences sharedPreferences =
-        await SharedPreferences.getInstance();
-
-    String employeeNo = sharedPreferences.getString('username')!;
+    String employeeNo = await AuthService().getEmpId();
 
     Map<String, dynamic> dataBody = {
       "Latitude": Constants.currentPosition!.latitude,

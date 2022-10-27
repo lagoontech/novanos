@@ -118,7 +118,7 @@ class ProfileScreen extends StatelessWidget {
                         BorderRadius.circular(Dimensions.radius10 / 2)),
                 child: TextButton(
                   onPressed: () async {
-                    AuthService().clearSharedPref();
+                    await AuthService().clearSharedPref();
                     await AuthService().saveAuthentication(false);
                     Get.off(() => LoginScreen());
                   },
